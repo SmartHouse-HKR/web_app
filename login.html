@@ -1,23 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Login Form</title>
-    <link rel="stylesheet" type="text/css" href="login.css">
+    <meta charset="UTF-8">
+    <title>Smarthouse LOGIN</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "login.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+    <script src="hivemq-mqtt-conn.js" type="text/javascript"></script>
+</head>
 <body>
    <div class="loginbox">
     <h1>Login</h1>
        <form>
            <p>Username</p>
-           <input type="text" name="" placeholder="Enter username">
+           <input type="text" name="txt-username" placeholder="Enter username">
            <p>Password</p>
-           <input type="password" name="" placeholder="Enter password">
-           <input type="submit" name="" value="Login">
+           <input type="password" name="txt-password" placeholder="Enter password">
+           <input type="submit" name="btn-submit" onclick="startConnect()" value="Login">
+           <input type="submit" name="btn-disc" onclick="startDisconnect()" value="Login">
            <a href="#">Lost your password?</a> <br>
-            <a href="#">Don't have an account?</a>
-       
        </form>
-
+       <div id="messages"></div>
     </div>
  
 </body>
-</head>
+
 </html>
