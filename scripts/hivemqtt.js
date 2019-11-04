@@ -55,6 +55,9 @@ function onLoadDashboard() {
 
 
 
+
+
+
 }
 
 // Called when the client logs in
@@ -86,6 +89,7 @@ function onConnect() {
     client.send("/test/delay/state", "is awesome", 0, true);
     // document.location.href = 'dashboard.html';
 
+    client.subscribe("/smarthouse/temp/state")
 
 }
 
@@ -96,7 +100,18 @@ function onConnectionLost(responseObject) {
 
 // Called when a message arrives
 function onMessageArrived(message) {
+
     console.log("onMessageArrived: " + message.payloadString);
+
+    console.log("from topic " + message.destinationName);
+
+    string1 = message.destinationName;
+    string2 = "/smarthouse/temp/state";
+    if(string1 === string2) {
+        document.getElementById("temperature_str").innerHTML = '<span>' + message.payloadString + '</span><br/>';
+
+    }
+
 }
 
 // Called when the disconnection button is pressed
@@ -121,5 +136,13 @@ function checkState(){
         client.send("/smarthouse/light/state", "ON", 0, true);
     }else{
         client.send("/smarthouse/light/state", "OFF", 0, true);
+    }
+}
+
+function checkFanState(){
+    if (document.getElementById("fan_checkbox").checked === true){
+        client.send("/smarthouse/fan/state", "ON", 0, true);
+    }else{
+        client.send("/smarthouse/fan/state", "OFF", 0, true);
     }
 }

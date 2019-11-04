@@ -46,7 +46,7 @@
     <div class="column">
         <div class="card">Temperature
 
-            <p>23 C°</p>
+            <p><div id="temperature_str"></div></p>
 
         </div>
     </div>
@@ -60,10 +60,16 @@
             </label></div>
     </div>
     <div class="column">
-        <div class="card">(other)
-        <p>..</p>
+        <div class="card">Fan
+            <br>
+            <br>
+            <label class="switch">
+                <input id="fan_checkbox"  type="checkbox" onclick="checkFanState()">
+                <span class="slider round"></span>
+            </label>
         </div>
     </div>
+
 </div>
 </div>
 </body>
