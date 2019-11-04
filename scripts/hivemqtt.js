@@ -83,7 +83,7 @@ function onConnect() {
     // Subscribe to the requested topic
     //client.subscribe("#");
     //console.log("subscribed to all")
-    client.send("/test/delay/state", "is great", 0, true);
+    client.send("/test/delay/state", "is awesome", 0, true);
     // document.location.href = 'dashboard.html';
 
 
@@ -114,4 +114,12 @@ function openNav() {
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
+}
+
+function checkState(){
+    if (document.getElementById("light_checkbox").checked === true){
+        client.send("/smarthouse/light/state", "ON", 0, true);
+    }else{
+        client.send("/smarthouse/light/state", "OFF", 0, true);
+    }
 }
