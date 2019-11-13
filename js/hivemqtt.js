@@ -21,8 +21,6 @@ function startLogin() {
     client.onConnectionLost = onConnectionLost;
     client.onMessageArrived = onMessageArrived;
 
-
-
     // Connect the client, if successful, call onConnect function
     client.connect({
         onSuccess: onLogIn,
@@ -53,6 +51,8 @@ function onLoadDashboard() {
     console.log("logged in client is" + client.clientId);
     document.getElementById("client").innerHTML += '<span>Logged in as: ' + client.clientId + '</span><br/>';
 
+    document.getElementById("light_checkbox").checked = true
+
 
 }
 
@@ -82,6 +82,7 @@ function onConnect() {
     //client.send("/test/delay/state", "is awesome", 0, true);
     // document.location.href = 'dashboard.html';
     client.subscribe("/smarthouse/temp/state");
+    clien.subscribe("/smarthouse/light/state");
 
 }
 
@@ -97,12 +98,18 @@ function onMessageArrived(message) {
 
     console.log("from topic " + message.destinationName);
 
-    string1 = message.destinationName;
-    string2 = "/smarthouse/temp/state";
-    if(string1 === string2) {
+
+    if(message.destinationName === "/smarthouse/temp/state") {
         document.getElementById("temperature_str").innerHTML = '<span>' + message.payloadString + '</span><br/>';
 
     }
+
+    if(message.destinationName === "/smarthouse/light/state") {
+      if(message.payloadString === "true"){
+        document.getElementById("light_checkbox").checked = true
+      }else{
+        document.getElementById("light_checkbox").checked = false
+      }
 
 }
 
@@ -121,9 +128,9 @@ function checkLightState(){
 
 function checkFanState(){
     if (document.getElementById("fan_checkbox").checked === true){
-        client.send("/smarthouse/fan/state", "ON", 0, true);
+        client.send("/smarthouse/fan/state", "true", 0, true);
     }else{
-        client.send("/smarthouse/fan/state", "OFF", 0, true);
+        client.send("/smarthouse/fan/state", "false", 0, true);
     }
 }
 
