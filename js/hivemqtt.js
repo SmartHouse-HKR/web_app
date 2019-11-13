@@ -99,49 +99,50 @@ function onMessageArrived(message) {
     console.log("from topic " + message.destinationName);
 
 
-    if(message.destinationName === "/smarthouse/temp/state") {
+    if (message.destinationName === "/smarthouse/temp/state") {
         document.getElementById("temperature_str").innerHTML = '<span>' + message.payloadString + '</span><br/>';
 
     }
 
-    if(message.destinationName === "/smarthouse/light/state") {
-      if(message.payloadString === "true"){
-        document.getElementById("light_checkbox").checked = true
-      }else{
-        document.getElementById("light_checkbox").checked = false
-      }
+    if (message.destinationName === "/smarthouse/light/state") {
+        if (message.payloadString === "true") {
+            document.getElementById("light_checkbox").checked = true
+        } else {
+            document.getElementById("light_checkbox").checked = false
+        }
 
-}
+    }
 
 // Called when the disconnection button is pressed
-function startDisconnect() {
-    client.disconnect();
-}
-
-function checkLightState(){
-    if (document.getElementById("light_checkbox").checked === true){
-        client.send("/smarthouse/light/state", "TRUE", 0, true);
-    }else{
-        client.send("/smarthouse/light/state", "FALSE", 0, true);
+    function startDisconnect() {
+        client.disconnect();
     }
-}
 
-function checkFanState(){
-    if (document.getElementById("fan_checkbox").checked === true){
-        client.send("/smarthouse/fan/state", "true", 0, true);
-    }else{
-        client.send("/smarthouse/fan/state", "false", 0, true);
+    function checkLightState() {
+        if (document.getElementById("light_checkbox").checked === true) {
+            client.send("/smarthouse/light/state", "TRUE", 0, true);
+        } else {
+            client.send("/smarthouse/light/state", "FALSE", 0, true);
+        }
     }
-}
+
+    function checkFanState() {
+        if (document.getElementById("fan_checkbox").checked === true) {
+            client.send("/smarthouse/fan/state", "true", 0, true);
+        } else {
+            client.send("/smarthouse/fan/state", "false", 0, true);
+        }
+    }
 
 // Set the width of the side navigation to 250px and the left margin of the page content to 250px
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
-}
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
 
 // Set the width of the side navigation to 0 and the left margin of the page content to 0
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
 }
