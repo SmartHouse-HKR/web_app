@@ -54,10 +54,6 @@ function onLoadDashboard() {
     document.getElementById("client").innerHTML += '<span>Logged in as: ' + client.clientId + '</span><br/>';
 
 
-
-
-
-
 }
 
 // Called when the client logs in
@@ -78,18 +74,14 @@ function onLogIn() {
 
 // Called when the client connects
 function onConnect() {
-    // Fetch the MQTT topic from the form
-    //topic = document.getElementById("topic").value;
     console.log("Connected");
-
 
     // Subscribe to the requested topic
     //client.subscribe("#");
     //console.log("subscribed to all")
-    client.send("/test/delay/state", "is awesome", 0, true);
+    //client.send("/test/delay/state", "is awesome", 0, true);
     // document.location.href = 'dashboard.html';
-
-    client.subscribe("/smarthouse/temp/state")
+    client.subscribe("/smarthouse/temp/state");
 
 }
 
@@ -119,6 +111,22 @@ function startDisconnect() {
     client.disconnect();
 }
 
+function checkLightState(){
+    if (document.getElementById("light_checkbox").checked === true){
+        client.send("/smarthouse/light/state", "TRUE", 0, true);
+    }else{
+        client.send("/smarthouse/light/state", "FALSE", 0, true);
+    }
+}
+
+function checkFanState(){
+    if (document.getElementById("fan_checkbox").checked === true){
+        client.send("/smarthouse/fan/state", "ON", 0, true);
+    }else{
+        client.send("/smarthouse/fan/state", "OFF", 0, true);
+    }
+}
+
 // Set the width of the side navigation to 250px and the left margin of the page content to 250px
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -129,20 +137,4 @@ function openNav() {
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
-}
-
-function checkState(){
-    if (document.getElementById("light_checkbox").checked === true){
-        client.send("/smarthouse/light/state", "ON", 0, true);
-    }else{
-        client.send("/smarthouse/light/state", "OFF", 0, true);
-    }
-}
-
-function checkFanState(){
-    if (document.getElementById("fan_checkbox").checked === true){
-        client.send("/smarthouse/fan/state", "ON", 0, true);
-    }else{
-        client.send("/smarthouse/fan/state", "OFF", 0, true);
-    }
 }

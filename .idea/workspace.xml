@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f2f81a42-1725-41df-8c10-1d4062c7c4f8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/styles/login-style2.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/hivemqtt.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/hivemqtt.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/login_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/login_style.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,6 +22,7 @@
         <option value="HTML File" />
         <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="SCSS File" />
       </list>
     </option>
   </component>
@@ -38,8 +42,8 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
-    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/Lab3_DelayWolfsteller_NetworkApplications/Lab3" />
+    <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -101,7 +105,13 @@
       <workItem from="1571261317033" duration="3815000" />
       <workItem from="1571989392051" duration="7286000" />
       <workItem from="1572797898223" duration="17808000" />
-      <workItem from="1572852794163" duration="9279000" />
+      <workItem from="1572852794163" duration="9790000" />
+      <workItem from="1572866741785" duration="839000" />
+      <workItem from="1573134786569" duration="542000" />
+      <workItem from="1573489573543" duration="1527000" />
+      <workItem from="1573492904922" duration="3844000" />
+      <workItem from="1573636499400" duration="1802000" />
+      <workItem from="1573650149156" duration="2634000" />
     </task>
     <servers />
   </component>
