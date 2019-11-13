@@ -82,7 +82,7 @@ function onConnect() {
     //client.send("/test/delay/state", "is awesome", 0, true);
     // document.location.href = 'dashboard.html';
     client.subscribe("/smarthouse/temp/state");
-    clien.subscribe("/smarthouse/light/state");
+    client.subscribe("/smarthouse/light/state");
 
 }
 
@@ -112,6 +112,7 @@ function onMessageArrived(message) {
         }
 
     }
+}
 
 // Called when the disconnection button is pressed
     function startDisconnect() {
@@ -119,10 +120,11 @@ function onMessageArrived(message) {
     }
 
     function checkLightState() {
+
         if (document.getElementById("light_checkbox").checked === true) {
-            client.send("/smarthouse/light/state", "TRUE", 0, true);
+            client.send("/smarthouse/light/state", "true", 0, true);
         } else {
-            client.send("/smarthouse/light/state", "FALSE", 0, true);
+            client.send("/smarthouse/light/state", "false", 0, true);
         }
     }
 
@@ -145,4 +147,3 @@ function onMessageArrived(message) {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft = "0";
     }
-}

@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f2f81a42-1725-41df-8c10-1d4062c7c4f8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/styles/login-style2.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hivemqtt.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/hivemqtt.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/login_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/login_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/hivemqtt.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/hivemqtt.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -112,6 +109,7 @@
       <workItem from="1573492904922" duration="3844000" />
       <workItem from="1573636499400" duration="1802000" />
       <workItem from="1573650149156" duration="2634000" />
+      <workItem from="1573674226984" duration="473000" />
     </task>
     <servers />
   </component>
