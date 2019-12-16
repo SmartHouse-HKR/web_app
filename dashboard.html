@@ -33,25 +33,25 @@
 </div>
     <br>
 <div class="row">
-    <div class="column">
-        <div class="card">Lights
+    <div class="column">    <!-- Card -->
+        <div class="card">Indoor Lights
             <br>
             <br>
             <label class="switch">
-                <input id="light_checkbox"  type="checkbox" onclick="checkLightState()">
+                <input id="light_checkbox"  type="checkbox" onclick="checkState()">
                 <span class="slider round"></span>
             </label>
         </div>
     </div>
-    <div class="column">
-        <div class="card">Temperature
+    <div class="column">   <!-- Indoor Temperature -->
+        <div class="card">Indoor Temperature
 
             <p><div id="temperature_str"></div></p>
 
         </div>
     </div>
-    <div class="column">
-        <div class="card">Alarm
+    <div class="column">   <!-- Fire Alarm -->
+        <div class="card">Fire Alarm
             <br>
             <br>
             <label class="switch">
@@ -60,7 +60,7 @@
             </label></div>
     </div>
     <div class="column">
-        <div class="card">Fan
+        <div class="card">Heater 1   <!-- Heater 1 -->
             <br>
             <br>
             <label class="switch">
@@ -71,6 +71,48 @@
     </div>
 
 </div>
+<!-- Row 2 -->
+</br>
+<div class="row">
+    <div class="column">    <!-- Card -->
+        <div class="card">Outdoor Lights
+            <br>
+            <br>
+            <label class="switch">
+                <input id="1"  type="checkbox" onclick="checkState()">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+    <div class="column">   <!-- Outdoor Temperature -->
+        <div class="card">Outdoor Temperature
+
+            <p><div id="2"></div></p>
+
+        </div>
+    </div>
+    <div class="column">   <!-- Burglar Alarm -->
+        <div class="card">Burglar Alarm
+            <br>
+            <br>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label></div>
+    </div>
+    <div class="column">
+        <div class="card">Heater 2   <!-- Heater 2 -->
+            <br>
+            <br>
+            <label class="switch">
+                <input id="3"  type="checkbox" onclick="checkFanState()">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+
 </div>
+</div>
+
 </body>
 </html>
