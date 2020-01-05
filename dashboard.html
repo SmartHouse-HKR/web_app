@@ -27,155 +27,316 @@
 
 
 <div id="main">
+
     <div class="header">
-         <a  class="logo" onclick="openNav()"><i class="fa fa-bars" > Smarthouse Dashboard</i></a>
+         <a  class="logo" onclick="openNav()"><i class="fa fa-bars" > </i> Smarthouse Dashboard </a>
+    </div>
 
-</div>
-    <br>
+<br>
+<!-- -------------------------------- 1st Row --------------------------------- -->
 <div class="row">
-    <div class="column">    <!-- Card -->
-        <div class="card">Indoor Lights
-            <br>
-            <br>
-            <label class="switch">
-                <input id="light_checkbox"  type="checkbox" onclick="checkState()">
-                <span class="slider round"></span>
-            </label>
+
+    <div class="column">    <!-- Indoor Lights Card -->
+        <div id="indoor_light_card" class="card">
+
+
+          <div class="row-beta">
+              <div class="col-50">
+                Indoor Lights
+              </br>
+              </br>
+              <label class="switch">
+                  <input id="indoor_light_checkbox"  type="checkbox" onclick="checkIndoorLightState()">
+                  <span class="slider round"></span>
+              </label>
+              </div>
+              <div class="col-50">
+                <div id="image">
+                    <img id="in_light_img" width="80" src="images/light-off.svg">
+                </div>
+              </div>
+            </div>
+
+
+
         </div>
     </div>
+
     <div class="column">   <!-- Indoor Temperature -->
-        <div class="card">Indoor Temperature
-
-            <p><div id="temperature_str"></div></p>
+        <div class="card">
+          <br>Indoor Temperature
+          <br>
+            <p><div id="indoor_temperature_str"style="font-size:30px"></div></p>
 
         </div>
     </div>
+
     <div class="column">   <!-- Fire Alarm -->
-        <div class="card">Fire Alarm
-            <br>
-            <br>
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label></div>
+        <div id="fire_alarm_card" class="card">
+
+
+            <div class="row-beta">
+                <div class="col-50">
+                  Fire Alarm
+                </br>
+                </br>
+                <label class="switch">
+                    <input id="fire_alarm_checkbox"  type="checkbox" onclick="checkFireAlarmState()">
+                    <span class="slider round"></span>
+                </label>
+                </div>
+                <div class="col-50">
+                  <div id="image">
+                      <img id="fire_img" width="80" src="images/no-fire.svg">
+                  </div>
+                </div>
+              </div>
+          </div>
     </div>
+
     <div class="column">
-        <div class="card">Heater 1   <!-- Heater 1 -->
+        <div id="heater1_card" class="card">   <!-- Heater 1 -->
+
+
+          <div class="row-beta">
+              <div class="col-50">
+                Heater 1
+
+              <br>
             <br>
             <br>
-            <label class="switch">
-                <input id="fan_checkbox"  type="checkbox" onclick="checkFanState()">
-                <span class="slider round"></span>
-            </label>
+              <label class="switch">
+                  <input id="heater1_checkbox"  type="checkbox" onclick="checkHeater1State()">
+                  <span class="slider round"></span>
+              </label>
+
+              </div>
+              <div class="col-50">
+                <div id="goal_temperature_heater1"style="font-size:30px"></div><br>
+
+
+
+                <div class="slidecontainer">
+                  <input type="range" name="foo" min="10" max="30" value="24" step="1" class="rngslider" id="sliderHeater1" onmouseup="setHeater1Temperature()">
+                </div>
+              </div>
+            </div>
+
+
+
+
+
         </div>
+
     </div>
+
 
 </div>
-<!-- Row 2 -->
+<!-- -------------------------------- 2nd Row --------------------------------- -->
 </br>
 <div class="row">
     <div class="column">    <!-- Card -->
-        <div class="card">Outdoor Lights
+        <div id="outdoor_light_card" class="card">
+
+
+          <div class="row-beta">
+              <div class="col-50">
+                Outdoor Light Sensor
+              </br>
+              </br>
+              <label class="switch">
+                  <input id="outdoor_light_sensor_checkbox"  type="checkbox" onclick="checkOutdoorLightSensorState()">
+                  <span class="slider round"></span>
+              </label>
+              </div>
+              <div class="col-50">
+                <div id="image">
+                    <img id="out_light_img" width="80" src="images/no-exposure.svg">
+                </div>
+              </div>
+            </div>
+
+
             <br>
             <br>
-            <label class="switch">
-                <input id="1"  type="checkbox" onclick="checkState()">
-                <span class="slider round"></span>
-            </label>
+
         </div>
     </div>
     <div class="column">   <!-- Outdoor Temperature -->
-        <div class="card">Outdoor Temperature
+        <div class="card">
+          <br>Outdoor Temperature<br>
 
-            <p><div id="2"></div></p>
+            <p><div id="outdoor_temperature_str" style="font-size:30px"></div></p>
 
         </div>
     </div>
-    <div class="column">   <!-- Burglar Alarm -->
-        <div class="card">Burglar Alarm
-            <br>
-            <br>
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label></div>
+    <div class="column">   <!-- burlgar Alarm -->
+        <div id="burglar_alarm_card" class="card">
+
+            <div class="row-beta">
+                <div class="col-50">
+                  Burglar Alarm
+                </br>
+                </br>
+
+                <label class="switch">
+                    <input id="burglar_alarm_checkbox"  type="checkbox" onclick="checkBurglarAlarmState()">
+                    <span class="slider round"></span>
+                </label>
+
+                </div>
+                <div class="col-50">
+                  <div id="image">
+                      <img id="burglar_img" width="80" src="images/siren-off.svg">
+                  </div>
+                </div>
+              </div>
+
+          </div>
     </div>
     <div class="column">
-        <div class="card">Heater 2   <!-- Heater 2 -->
+        <div id="heater2_card" class="card">    <!-- Heater 1 -->
+
+
+          <div class="row-beta">
+              <div class="col-50">
+                Heater 2
+
+              <br>
             <br>
             <br>
             <label class="switch">
-                <input id="3"  type="checkbox" onclick="checkFanState()">
+                <input id="heater2_checkbox"  type="checkbox" onclick="checkHeater2State()">
                 <span class="slider round"></span>
             </label>
+
+              </div>
+              <div class="col-50">
+                <div id="goal_temperature_heater2"style="font-size:30px"></div><br>
+
+
+
+                <div class="slidecontainer">
+                  <input type="range" name="foo" min="10" max="30" value="24" step="1" class="rngslider" id="sliderHeater2" onmouseup="setHeater2Temperature()">
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
         </div>
+
     </div>
 
 </div>
-    <!-- Row 3 -->
+<!-- -------------------------------- 3rd Row --------------------------------- -->
 
     </br>
     <div class="row">
         <div class="column">    <!-- Card -->
-            <div class="card">Fan
+            <div class="card">Fan Speed
+            </br>
+          </br>
+                <div class="row-beta">
+                    <div class="col-1">
+                      <div class="slidecontainer">
+                        <input type="range" name="foo" min="0" max="100" value="0" step="25" class="rngslider" id="sliderFan" onmouseup="setFanSpeed()">
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <div id="fan_speed_str"></div><br>
+                    </div>
+                  </div>
 
-                <br>
-                <br>
-                <div class="slidecontainer">
-                    <p>Value: range slider tba </p>
-
-                </div>
             </div>
 
         </div>
         <div class="column">   <!-- Voltage -->
-            <div class="card">Voltage
+            <div class="card"><br>Voltage<br>
 
-                <p><div id="Voltage"></div></p>
+                <p><div id="voltage_str" style="font-size:30px"></div></p>
 
             </div>
         </div>
-        <div class="column">   <!-- Power cut -->
-            <div class="card">Power cut
-                <br>
-                <br>
+        <div class="column">   <!-- Voltage -->
+            <div id="window_card" class="card">
+
+              <div class="row-beta">
+                  <div class="col-50">
+                    Open Window
+                  </br>
+                  </br>
+                    <label class="switch" padding="100px">
+                        <input id="window_alarm_checkbox"  type="checkbox" onclick="checkWindowAlarmState()">
+                        <span class="slider round"></span>
+                    </label>
+                  </div>
+                  <div class="col-50">
+                    <div id="image">
+                        <img id="window_img" width="80" src="images/window-closed.svg">
+                    </div>
+                  </div>
                 </div>
+
+
+
+
+
+
+
+            </div>
         </div>
         <div class="column">   <!-- Water leak -->
-            <div class="card">Water leak
+            <div id="water_leak_card" class="card">Water leak
                 <br>
                 <br>
+                <div id="image">
+                    <img id="water_leak_img" width="80" src="images/no-leak.svg">
+                </div>
             </div>
         </div>
         </div>
 
-    </div>
-<!-- Row 4 -->
+
+<!-- -------------------------------- 4th Row --------------------------------- -->
 
 </br>
 <div class="row">
-    <div class="column">    <!-- Oven -->
-        <div class="card">Oven
+    <div class="column">    <!-- Card -->
+        <div id="oven_card" class="card">Oven
+          <br>
+          <br>
+          <div id="image">
+              <img id="oven_img" width="80" src="images/oven-off.svg">
+          </div>
+        </div>
 
+    </div>
+    <div class="column">   <!-- Power cut -->
+        <div id="power_card" class="card">Power
             <br>
             <br>
-            <div class="slidecontainer">
-
+            <div id="image">
+                <img id="power_img" width="80" src="images/power-off.svg">
             </div>
-        </div>
-
+          </div>
     </div>
-    <div class="column">   <!-- Open Window -->
-        <div class="card">Open Window
 
-            <p><div id="10"></div></p>
 
-        </div>
-    </div>
+
 </div>
 
 </div>
+
 
 </body>
+<div class="footer">
+  <p>
+    <div style="font-size:10px">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
+  </p>
+</div>
 </html>

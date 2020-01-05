@@ -1,14 +1,15 @@
 /* Style the header with a grey background and some padding */
 .header {
+font-family: Verdana, sans-serif;
     overflow: hidden;
-    background-color: #f1f1f1;
+    background-color: #37474f;
     padding: 20px 10px;
 }
 
 /* Style the header links */
 .header a {
     float: left;
-    color: black;
+    color: white;
     text-align: center;
     padding: 12px;
     text-decoration: none;
@@ -20,13 +21,13 @@
 /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
 .header a.logo {
     font-size: 25px;
-    font-weight: bold;
+
 }
 
 /* Change the background color on mouse-over */
 .header a:hover {
-    background-color: #ddd;
-    color: black;
+    background-color: #607D8B;
+    color: #FFFFFF;
 }
 
 /* Style the active/current link*/
@@ -40,7 +41,9 @@
     float: right;
 }
 body {
-    font-family: Lato, serif;
+    font-family: Verdana;
+    background-color: #90a4ae;
+    color: #fff
 }
 
 
@@ -82,8 +85,9 @@ body {
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
     padding: 16px;
+    height: 150px;
     text-align: center;
-    background-color: #f1f1f1;
+    background-color: #546e7a;
 }
 
 /* Responsive columns - one column layout (vertical) on small screens */
@@ -119,7 +123,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #263238;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -137,7 +141,7 @@ body {
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #99FF00;
 }
 
 input:focus + .slider {
@@ -207,4 +211,87 @@ input:checked + .slider:before {
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
+}
+
+#range {
+    -webkit-appearance: slider-horizontal;
+    width: 100px;
+    height: 50px;
+    border-radius: 5px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+}
+.goal_temperature_heater1{
+  width: 25%;
+}
+.slidecontainer {
+  width: 100%;
+}
+
+.rngslider {
+  -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.rngslider:hover {
+  opacity: 1;
+}
+
+.rngslider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background:#c6ff00;
+
+  cursor: pointer;
+}
+
+.rngslider::-moz-range-thumb {
+  width: 25px;
+ height: 25px;
+ border-radius: 50%;
+ background: #4CAF50;
+ cursor: pointer;
+}
+
+.row-beta {
+  display: flex; /* equal height of the children */
+}
+
+.col-1 {
+  width:75%; /* additionally, equal width */
+
+  padding: 1em;
+
+}
+.col-2 {
+  width:25%; /* additionally, equal width */
+
+  padding: 1em;
+
+}
+.col-50 {
+  width:50%; /* additionally, equal width */
+
+  padding: 1em;
+
+}
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #263238;
+  color: white;
+  text-align: center;
 }
