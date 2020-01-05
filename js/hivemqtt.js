@@ -1,5 +1,5 @@
 
-    let isFireAlarmActive = false;
+  //  let isFireAlarmActive = false;
     let isBurglarAlarmActive = false;
     let isWindowALarmActive = false;
 
@@ -59,7 +59,7 @@ function onLoadDashboard() {
         //password : document.getElementById("password").value
     });
     console.log("logged in client is" + client.clientId);
-    document.getElementById("client").innerHTML += '<span>Logged in as: ' + client.clientId + '</span><br/>';
+    document.getElementById("client").innerHTML += '<span>Logged in as: ' + client.clientId + '</span>';
 
 //Heater 1 settings
     var range1 = document.getElementById("sliderHeater1");
@@ -133,7 +133,9 @@ function onConnect() {
 
 // Called when the client loses its connection
 function onConnectionLost(responseObject) {
+
     console.log("connection lost")
+      document.getElementById("disconnected_str").innerHTML = '<span>DISCONNECTED FROM THE SERVER</span>';
 }
 
 // Called when a message arrives
