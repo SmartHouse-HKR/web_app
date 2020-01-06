@@ -86,7 +86,7 @@ body {
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
     padding: 16px;
-    height: 150px;
+    height: 160px;
     text-align: center;
     background-color: #546e7a;
 }
@@ -301,7 +301,7 @@ input:checked + .slider:before {
   background-color: #0277bd; /* Green */
   border: none;
   color: white;
-  padding: 2px 10px;
+  padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;

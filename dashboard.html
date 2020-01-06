@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Smarthouse Dashboard</title>
-    <link rel = "stylesheet"
-          type = "text/css"
-          href = "css/dashboard_style.css"
+    <link rel="stylesheet"
+          type="text/css"
+          href="css/dashboard_style.css"
 
     />
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js"
+            type="text/javascript"></script>
     <script src="js/hivemqtt.js" type="text/javascript"></script>
 </head>
 <body onload="onLoadDashboard()">
@@ -27,214 +28,212 @@
 <!-- Use any element to open the sidenav -->
 
 
-
 <div id="main">
 
     <div class="header">
-         <a  class="logo" onclick="openNav()"><i class="fa fa-bars" > </i>  Smarthouse Dashboard </a>
+        <a class="logo" onclick="openNav()"><i class="fa fa-bars"> </i> Smarthouse Dashboard </a>
     </div>
 
-<br>
-<!-- -------------------------------- 1st Row --------------------------------- -->
-<div class="row">
+    <br>
+    <!-- -------------------------------- 1st Row --------------------------------- -->
+    <div class="row">
 
-    <div class="column">    <!-- Indoor Lights Card -->
-        <div id="indoor_light_card" class="card">
+        <div class="column">    <!-- Indoor Lights Card -->
+            <div id="indoor_light_card" class="card">
 
 
-          <div class="row-beta">
-              <div class="col-50">
-                Indoor Lights
-              </br>
-              </br>
-              <label class="switch">
-                  <input id="indoor_light_checkbox"  type="checkbox" onclick="checkIndoorLightState()">
-                  <span class="slider round"></span>
-              </label>
-              </div>
-              <div class="col-50">
-                <div id="image">
-                    <img id="in_light_img" width="80" src="images/light-off.svg">
+                <div class="row-beta">
+                    <div class="col-50">
+                        Indoor Lights
+                        </br>
+                        </br>
+                        <label class="switch">
+                            <input id="indoor_light_checkbox" type="checkbox" onclick="checkIndoorLightState()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="col-50">
+                        <div id="image">
+                            <img id="in_light_img" width="80" src="images/light-off.svg">
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+
+            </div>
+        </div>
+
+        <div class="column">   <!-- Indoor Temperature -->
+            <div class="card">
+                <br>Indoor Temperature
+                <br>
+                <p>
+                <div id="indoor_temperature_str" style="font-size:30px"></div>
+                </p>
+
+            </div>
+        </div>
+
+        <div class="column">   <!-- Fire Alarm -->
+            <div id="fire_alarm_card" class="card">
+
+
+                <div class="row-beta">
+                    <div class="col-50">
+                        Fire Alarm
+                        </br>
+                        </br>
+                        <label class="switch">
+                            <input id="fire_alarm_checkbox" type="checkbox" onclick="checkFireAlarmState()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="col-50">
+                        <div id="image">
+                            <img id="fire_img" width="80" src="images/no-fire.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div id="heater1_card" class="card">   <!-- Heater 1 -->
+
+
+                <div class="row-beta">
+                    <div class="col-50">
+                        Heater 1
+
+                        <br>
+                        <br>
+                        <br>
+                        <label class="switch">
+                            <input id="heater1_checkbox" type="checkbox" onclick="checkHeater1State()">
+                            <span class="slider round"></span>
+                        </label>
+
+                    </div>
+                    <div class="col-50">
+                        <div id="goal_temperature_heater1" style="font-size:30px"></div>
+                        <br>
+
+
+                        <div class="slidecontainer">
+                            <input type="range" name="foo" min="10" max="30" value="24" step="1" class="rngslider"
+                                   id="sliderHeater1" onmouseup="setHeater1Temperature()">
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
 
-
-
         </div>
+
+
     </div>
+    <!-- -------------------------------- 2nd Row --------------------------------- -->
+    </br>
+    <div class="row">
+        <div class="column">    <!-- Card -->
+            <div id="outdoor_light_card" class="card">
 
-    <div class="column">   <!-- Indoor Temperature -->
-        <div class="card">
-          <br>Indoor Temperature
-          <br>
-            <p><div id="indoor_temperature_str"style="font-size:30px"></div></p>
 
+                <div class="row-beta">
+                    <div class="col-50">
+                        Outdoor Light Sensor
+                        </br>
+                        </br>
+                        <label class="switch">
+                            <input id="outdoor_light_sensor_checkbox" type="checkbox"
+                                   onclick="checkOutdoorLightSensorState()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="col-50">
+                        <div id="image">
+                            <img id="out_light_img" width="80" src="images/no-exposure.svg">
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+                <br>
+
+            </div>
         </div>
-    </div>
+        <div class="column">   <!-- Outdoor Temperature -->
+            <div class="card">
+                <br>Outdoor Temperature<br>
 
-    <div class="column">   <!-- Fire Alarm -->
-        <div id="fire_alarm_card" class="card">
+                <p>
+                <div id="outdoor_temperature_str" style="font-size:30px"></div>
+                </p>
 
+            </div>
+        </div>
+        <div class="column">   <!-- burlgar Alarm -->
+            <div id="burglar_alarm_card" class="card">
 
-            <div class="row-beta">
-                <div class="col-50">
-                  Fire Alarm
-                </br>
-                </br>
-                <label class="switch">
-                    <input id="fire_alarm_checkbox"  type="checkbox" onclick="checkFireAlarmState()">
-                    <span class="slider round"></span>
-                </label>
+                <div class="row-beta">
+                    <div class="col-50">
+                        Burglar Alarm
+                        </br>
+                        </br>
+
+                        <label class="switch">
+                            <input id="burglar_alarm_checkbox" type="checkbox" onclick="checkBurglarAlarmState()">
+                            <span class="slider round"></span>
+                        </label>
+
+                    </div>
+                    <div class="col-50">
+                        <div id="image">
+                            <img id="burglar_img" width="80" src="images/siren-off.svg">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-50">
-                  <div id="image">
-                      <img id="fire_img" width="80" src="images/no-fire.svg">
-                  </div>
+
+            </div>
+        </div>
+        <div class="column">
+            <div id="heater2_card" class="card">    <!-- Heater 1 -->
+
+
+                <div class="row-beta">
+                    <div class="col-50">
+                        Heater 2
+
+                        <br>
+                        <br>
+                        <br>
+                        <label class="switch">
+                            <input id="heater2_checkbox" type="checkbox" onclick="checkHeater2State()">
+                            <span class="slider round"></span>
+                        </label>
+
+                    </div>
+                    <div class="col-50">
+                        <div id="goal_temperature_heater2" style="font-size:30px"></div>
+                        <br>
+
+
+                        <div class="slidecontainer">
+                            <input type="range" name="foo" min="10" max="30" value="24" step="1" class="rngslider"
+                                   id="sliderHeater2" onmouseup="setHeater2Temperature()">
+                        </div>
+                    </div>
                 </div>
-              </div>
-          </div>
-    </div>
-
-    <div class="column">
-        <div id="heater1_card" class="card">   <!-- Heater 1 -->
 
 
-          <div class="row-beta">
-              <div class="col-50">
-                Heater 1
-
-              <br>
-            <br>
-            <br>
-              <label class="switch">
-                  <input id="heater1_checkbox"  type="checkbox" onclick="checkHeater1State()">
-                  <span class="slider round"></span>
-              </label>
-
-              </div>
-              <div class="col-50">
-                <div id="goal_temperature_heater1"style="font-size:30px"></div><br>
-
-
-
-                <div class="slidecontainer">
-                  <input type="range" name="foo" min="10" max="30" value="24" step="1" class="rngslider" id="sliderHeater1" onmouseup="setHeater1Temperature()">
-                </div>
-              </div>
             </div>
 
-
-
-
-
         </div>
 
     </div>
-
-
-</div>
-<!-- -------------------------------- 2nd Row --------------------------------- -->
-</br>
-<div class="row">
-    <div class="column">    <!-- Card -->
-        <div id="outdoor_light_card" class="card">
-
-
-          <div class="row-beta">
-              <div class="col-50">
-                Outdoor Light Sensor
-              </br>
-              </br>
-              <label class="switch">
-                  <input id="outdoor_light_sensor_checkbox"  type="checkbox" onclick="checkOutdoorLightSensorState()">
-                  <span class="slider round"></span>
-              </label>
-              </div>
-              <div class="col-50">
-                <div id="image">
-                    <img id="out_light_img" width="80" src="images/no-exposure.svg">
-                </div>
-              </div>
-            </div>
-
-
-            <br>
-            <br>
-
-        </div>
-    </div>
-    <div class="column">   <!-- Outdoor Temperature -->
-        <div class="card">
-          <br>Outdoor Temperature<br>
-
-            <p><div id="outdoor_temperature_str" style="font-size:30px"></div></p>
-
-        </div>
-    </div>
-    <div class="column">   <!-- burlgar Alarm -->
-        <div id="burglar_alarm_card" class="card">
-
-            <div class="row-beta">
-                <div class="col-50">
-                  Burglar Alarm
-                </br>
-                </br>
-
-                <label class="switch">
-                    <input id="burglar_alarm_checkbox"  type="checkbox" onclick="checkBurglarAlarmState()">
-                    <span class="slider round"></span>
-                </label>
-
-                </div>
-                <div class="col-50">
-                  <div id="image">
-                      <img id="burglar_img" width="80" src="images/siren-off.svg">
-                  </div>
-                </div>
-              </div>
-
-          </div>
-    </div>
-    <div class="column">
-        <div id="heater2_card" class="card">    <!-- Heater 1 -->
-
-
-          <div class="row-beta">
-              <div class="col-50">
-                Heater 2
-
-              <br>
-            <br>
-            <br>
-            <label class="switch">
-                <input id="heater2_checkbox"  type="checkbox" onclick="checkHeater2State()">
-                <span class="slider round"></span>
-            </label>
-
-              </div>
-              <div class="col-50">
-                <div id="goal_temperature_heater2"style="font-size:30px"></div><br>
-
-
-
-                <div class="slidecontainer">
-                  <input type="range" name="foo" min="10" max="30" value="24" step="1" class="rngslider" id="sliderHeater2" onmouseup="setHeater2Temperature()">
-                </div>
-              </div>
-            </div>
-
-
-
-
-
-
-        </div>
-
-    </div>
-
-</div>
-<!-- -------------------------------- 3rd Row --------------------------------- -->
+    <!-- -------------------------------- 3rd Row --------------------------------- -->
 
     </br>
     <div class="row">
@@ -242,34 +241,28 @@
             <div class="card">
 
 
+                <div class="row-beta">
+                    <div class="col-50">
+                        Fan Speed
 
-              <div class="row-beta">
-                  <div class="col-50">
-                    Fan Speed
+                        <br>
+                        <br>
+                        <br>
+                        <div class="slidecontainer">
+                            <input type="range" name="foo" min="0" max="100" value="0" step="25" class="rngslider"
+                                   id="sliderFan" onmouseup="setFanSpeed()">
+                        </div>
 
-                  <br>
-                <br>
-                <br>
-                <div class="slidecontainer">
-                  <input type="range" name="foo" min="0" max="100" value="0" step="25" class="rngslider" id="sliderFan" onmouseup="setFanSpeed()">
+                    </div>
+                    <div class="col-50">
+                        <br>
+
+                        <div id="fan_speed_str" style="font-size:30px"></div>
+                        <br>
+
+
+                    </div>
                 </div>
-
-                  </div>
-                  <div class="col-50">
-                    <br>
-
-                  <div id="fan_speed_str"style="font-size:30px"></div><br>
-
-
-
-
-                  </div>
-                </div>
-
-
-
-
-
 
 
             </div>
@@ -279,34 +272,31 @@
         <div class="column">   <!-- Voltage -->
             <div class="card"><br>Voltage<br>
 
-                <p><div id="voltage_str" style="font-size:30px"></div></p>
+                <p>
+                <div id="voltage_str" style="font-size:30px"></div>
+                </p>
 
             </div>
         </div>
         <div class="column">   <!-- Voltage -->
             <div id="window_card" class="card">
 
-              <div class="row-beta">
-                  <div class="col-50">
-                    Open Window
-                  </br>
-                  </br>
-                    <label class="switch" padding="100px">
-                        <input id="window_alarm_checkbox"  type="checkbox" onclick="checkWindowAlarmState()">
-                        <span class="slider round"></span>
-                    </label>
-                  </div>
-                  <div class="col-50">
-                    <div id="image">
-                        <img id="window_img" width="80" src="images/window-closed.svg">
+                <div class="row-beta">
+                    <div class="col-50">
+                        Open Window
+                        </br>
+                        </br>
+                        <label class="switch" padding="100px">
+                            <input id="window_alarm_checkbox" type="checkbox" onclick="checkWindowAlarmState()">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
-                  </div>
+                    <div class="col-50">
+                        <div id="image">
+                            <img id="window_img" width="80" src="images/window-closed.svg">
+                        </div>
+                    </div>
                 </div>
-
-
-
-
-
 
 
             </div>
@@ -320,150 +310,144 @@
                 </div>
             </div>
         </div>
-        </div>
-
-
-<!-- -------------------------------- 4th Row --------------------------------- -->
-
-</br>
-<div class="row">
-    <div class="column">    <!-- Card -->
-        <div id="oven_card" class="card">Oven
-          <br>
-          <br>
-          <div id="image">
-              <img id="oven_img" width="80" src="images/oven-off.svg">
-          </div>
-        </div>
-
-    </div>
-    <div class="column">   <!-- Power cut -->
-        <div id="power_card" class="card">Power
-            <br>
-            <br>
-            <div id="image">
-                <img id="power_img" width="80" src="images/power-off.svg">
-            </div>
-          </div>
     </div>
 
-    <div class="column">    <!-- Indoor Lights Card -->
-        <div id="bt_light_card" class="card"style="background-color:#0277bd;">
-          Bluetooth Lights
-          <br>
 
-          <img id="bt_light_img1" width="60" src="images/light-off.svg"style="margin-right: 10px">
-          <img id="bt_light_img2" width="60" src="images/light-off.svg"style="margin-right: 10px">
-          <img id="bt_light_img3" width="60" src="images/light-off.svg"style="margin-right: 10px">
-          <img id="bt_light_img4" width="60" src="images/light-off.svg">
-          <br>
-          <label class="switch"style="margin-right: 10px">
-              <input id="bt_light_checkbox1"  type="checkbox" onclick="checkBTLightState()" >
-              <span class="slider round"></span>
-          </label>
-          <label class="switch"style="margin-right: 10px">
-              <input id="bt_light_checkbox2"  type="checkbox" onclick="checkBTLightState()">
-              <span class="slider round"></span>
-          </label>
-          <label class="switch"style="margin-right: 10px">
-              <input id="bt_light_checkbox3"  type="checkbox" onclick="checkBTLightState()">
-              <span class="slider round"></span>
-          </label>
-          <label class="switch">
-              <input id="bt_light_checkbox4"  type="checkbox" onclick="checkBTLightState()">
-              <span class="slider round"></span>
-          </label>
+    <!-- -------------------------------- 4th Row --------------------------------- -->
 
-
-
-
-
-        </div>
-    </div>
-    <div class="column">    <!-- Indoor Lights Card -->
-        <div id="bt_fan_card" class="card"style="background-color:#0277bd;">   Bluetooth Fan
-
-          <br>
-          <button id="btn_bt_fan_mode" class="button button2"><img id="bt_fan_mode_img" width="60" src="images/bt-fan-off.svg" onclick="checkBTfanMode()"></button>
-
-              <img id="bt_fan_swing_img" width="60" src="images/swing-off.svg">
-              <button id="btn_bt_fan_timer" class="button button2"><img id="bt_fan_timer_img" width="60" src="images/chronometer-off.svg" onclick="addTimeBTfan()"></button>
-              <br>
-          <label class="switch" >
-              <input id="bt_fan_checkbox"  type="checkbox" onclick="checkBTfanState()">
-              <span class="slider round"></span>
-          </label>
-          <label class="switch" >
-              <input id="bt_fan_swing_checkbox"  type="checkbox" onclick="checkBTfanSwingState()">
-              <span class="slider round"></span>
-          </label>
-          <label class="switch" >
-                <div id="bt_fan_timer_str" style="font-size:20px"></div>
-          </label>
-
-
-
-
-        </div>
-    </div>
-
-</div>
-
-<!-- -------------------------------- 5th Row --------------------------------- -->
-
-</br>
-<div class="row">
-
-    <div class="column">    <!-- Indoor Lights Card -->
-        <div id="bt_lamp_card" class="card"style="background-color:#0277bd;">
-
-          <br>
-
-          <div class="row-beta">
-              <div class="col-50">
-                Bluetooth Lamp
-              </br>
-              </br>
-              <label class="switch">
-                  <input id="bt_lamp_checkbox"  type="checkbox" onclick="checkBtLampState()">
-                  <span class="slider round"></span>
-              </label>
-              </div>
-              <div class="col-50">
+    </br>
+    <div class="row">
+        <div class="column">    <!-- Card -->
+            <div id="oven_card" class="card">Oven
+                <br>
+                <br>
                 <div id="image">
-                    <img id="bt_lamp_img" width="80" src="images/lamp-off.svg">
+                    <img id="oven_img" width="80" src="images/oven-off.svg">
                 </div>
-              </div>
             </div>
 
-
-
-
-
         </div>
+        <div class="column">   <!-- Power cut -->
+            <div id="power_card" class="card">Power
+                <br>
+                <br>
+                <div id="image">
+                    <img id="power_img" width="80" src="images/power-off.svg">
+                </div>
+            </div>
+        </div>
+
+        <div class="column">    <!-- Indoor Lights Card -->
+            <div id="bt_light_card" class="card" style="background-color:#0277bd;">
+                Bluetooth Lights
+                <br>
+
+
+                <button id="btn_light_1" class="button button2" style="margin-right: 10px; margin-top:10px"
+                        onclick="clickBtLight1()"><img id="bt_light_img1" width="60" src="images/light-off.svg">
+                </button>
+                <button id="btn_light_2" class="button button2" style="margin-right: 10px; margin-top:10px"
+                        onclick="clickBtLight2()"><img id="bt_light_img2" width="60" src="images/light-off.svg">
+                </button>
+                <button id="btn_light_3" class="button button2" style="margin-right: 10px; margin-top:10px"
+                        onclick="clickBtLight3()"><img id="bt_light_img3" width="60" src="images/light-off.svg">
+                </button>
+                <button id="btn_light_4" class="button button2" style="margin-top:10px" onclick="clickBtLight4()"><img
+                        id="bt_light_img4" width="60" src="images/light-off.svg"></button>
+
+
+            </div>
+        </div>
+        <div class="column">    <!-- Indoor Lights Card -->
+            <div id="bt_fan_card" class="card" style="background-color:#0277bd;"> Bluetooth Fan
+
+                <br>
+                <button id="btn_bt_fan_mode" style="margin-top:10px; margin-right:60px; margin-bottom:0px"
+                        class="button button2"><img id="bt_fan_mode_img" style=" margin-bottom:0px" width="60"
+                                                    src="images/bt-fan-off.svg" onclick="checkBTfanMode()"></button>
+                <button id="btn_bt_fan_swing" class="button button2"
+                        style="margin-top:10px; margin-right:60px; margin-bottom:0px" onclick="checkBTfanSwingState()">
+                    <img id="bt_fan_swing_img" style=" margin-bottom:0px" width="60" src="images/swing-off.svg">
+                </button>
+                <button id="btn_bt_fan_timer" class="button button2" style=" margin-bottom:0px"><img
+                        id="bt_fan_timer_img" style=" margin-bottom:0px" width="60" src="images/chronometer-off.svg"
+                        onclick="addTimeBTfan()"></button>
+                <br>
+                <label class="switch" style="margin-top:0px; margin-right:220px">
+                    <input id="bt_fan_checkbox" type="checkbox" onclick="checkBTfanState()">
+                    <span class="slider round"></span>
+                </label>
+
+                <label class="switch" style=" margin-right:10px">
+                    <div id="bt_fan_timer_str" style="font-size:20"></div>
+                </label>
+
+
+            </div>
+        </div>
+
     </div>
 
-    <div class="column">    <!-- Indoor Lights Card -->
-        <div id="bt_microwave_card" class="card"style="background-color:#0277bd;">  Microwave
-            <br>
-          <button id="btn_defrost" class="button button2"><img id="bt_defrost_img" width="80" src="images/defrost.svg" onclick="defrost()"></button>
-          <button id="btn_chicken" class="button button2"><img id="bt_chicken_img" width="80" src="images/chicken.svg" onclick="cookChicken()"></button>
-          <button id="btn_fish" class="button button2"><img id="bt_fish_img" width="80" src="images/fish.svg" onclick="cookFish()"></button>
+    <!-- -------------------------------- 5th Row --------------------------------- -->
+
+    </br>
+    <div class="row">
+
+        <div class="column">    <!-- Indoor Lights Card -->
+            <div id="bt_lamp_card" class="card" style="background-color:#0277bd;">
+
+                <br>
+
+                <div class="row-beta">
+                    <div class="col-50">
+                        Bluetooth Lamp
+                        </br>
+                        </br>
+                        <label class="switch">
+                            <input id="bt_lamp_checkbox" type="checkbox" onclick="checkBtLampState()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="col-50">
+                        <div id="image">
+                            <img id="bt_lamp_img" width="80" src="images/lamp-off.svg">
+                        </div>
+                    </div>
+                </div>
 
 
+            </div>
         </div>
-    </div>
 
-</div>
+        <div class="column">    <!-- Indoor Lights Card -->
+            <div id="bt_microwave_card" class="card" style="background-color:#0277bd;"> Microwave
+                <br>
+                <button id="btn_defrost" class="button button2"><img id="bt_defrost_img" width="80"
+                                                                     src="images/defrost.svg" onclick="defrost()">
+                </button>
+                <button id="btn_chicken" class="button button2"><img id="bt_chicken_img" width="80"
+                                                                     src="images/chicken.svg" onclick="cookChicken()">
+                </button>
+                <button id="btn_fish" class="button button2"><img id="bt_fish_img" width="80" src="images/fish.svg"
+                                                                  onclick="cookFish()"></button>
+
+
+            </div>
+        </div>
+
+    </div>
 
 </div>
 
 
 </body>
 <div class="footer">
-  <p>
-    <div style="color:grey; font-size:10px">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-<a style="color:grey; font-size:10px" href="https://www.freepik.com/free-photos-vectors/background">Background vector created by freepik - www.freepik.com</a>
-  </p>
+    <p>
+    <div style="color:grey; font-size:10px">Icons made by <a href="https://www.flaticon.com/authors/freepik"
+                                                             title="Freepik">Freepik</a> from <a
+            href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    <a style="color:grey; font-size:10px" href="https://www.freepik.com/free-photos-vectors/background">Background
+        vector created by freepik - www.freepik.com</a>
+    </p>
 </div>
 </html>

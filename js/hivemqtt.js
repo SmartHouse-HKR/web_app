@@ -1,12 +1,16 @@
-
-    let isFireAlarmActive = false;
-    let isBurglarAlarmActive = false;
-    let isWindowALarmActive = false;
-    let isOutdoorSensorActive = false;
-    let isBTfanOn= 0;
-    let timerPressed = false ;
-    let btFanTimerEndTime ;
-    let isMicrowaveInUse = false;
+let isFireAlarmActive = false;
+let isBurglarAlarmActive = false;
+let isWindowALarmActive = false;
+let isOutdoorSensorActive = false;
+let isBTfanOn = 0;
+let timerPressed = false;
+let btFanTimerEndTime;
+let isMicrowaveInUse = false;
+let is_BTLight1_on = false;
+let is_BTLight2_on = false;
+let is_BTLight3_on = false;
+let is_BTLight4_on = false;
+let is_BTfan_swinging = false;
 
 // Called after form input is processed
 function startLogin() {
@@ -24,7 +28,7 @@ function startLogin() {
     localStorage["clientID"] = clientID;
 
     // Initialize new Paho client connection
-    client = new Paho.MQTT.Client(host, Number(port), "/mqtt",clientID);
+    client = new Paho.MQTT.Client(host, Number(port), "/mqtt", clientID);
 
     console.log(client.clientId);
 
@@ -70,18 +74,18 @@ function onLoadDashboard() {
     var range1 = document.getElementById("sliderHeater1");
     var output = document.getElementById("goal_temperature_heater1");
     output.innerHTML = '<span> ' + range1.value + ' °C</span><br/>';
-    range1.oninput = function(){
+    range1.oninput = function () {
 
-      document.getElementById("goal_temperature_heater1").innerHTML = '<span> ' + range1.value + ' °C</span><br/>';
+        document.getElementById("goal_temperature_heater1").innerHTML = '<span> ' + range1.value + ' °C</span><br/>';
     }
 
 //Heater 2 settings
     var range2 = document.getElementById("sliderHeater2");
     var output = document.getElementById("goal_temperature_heater2");
     output.innerHTML = '<span> ' + range2.value + ' °C</span><br/>';
-    range2.oninput = function(){
+    range2.oninput = function () {
 
-      document.getElementById("goal_temperature_heater2").innerHTML = '<span> ' + range2.value + ' °C</span><br/>';
+        document.getElementById("goal_temperature_heater2").innerHTML = '<span> ' + range2.value + ' °C</span><br/>';
     }
 
     document.getElementById("bt_fan_timer_str").innerHTML = '<span> 00:00:00</span>';
@@ -180,14 +184,15 @@ function onMessageArrived(message) {
         } else if (message.payloadString === "chicken") {
             document.getElementById("bt_chicken_img").src = "images/chicken-on.svg"
             document.getElementById("bt_microwave_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
-        }else if (message.payloadString === "fish") {
+        } else if (message.payloadString === "fish") {
             document.getElementById("bt_fish_img").src = "images/fish-on.svg"
             document.getElementById("bt_microwave_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
-        }else {
+        } else {
             document.getElementById("bt_defrost_img").src = "images/defrost.svg"
             document.getElementById("bt_chicken_img").src = "images/chicken.svg"
             document.getElementById("bt_fish_img").src = "images/fish.svg"
-            document.getElementById("bt_microwave_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";  }
+            document.getElementById("bt_microwave_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+        }
 
     }
 
@@ -204,96 +209,95 @@ function onMessageArrived(message) {
 
     }
 
-if(isOutdoorSensorActive){
-    if (message.destinationName === "smarthouse/outdoor_light/trigger") {
-        if (message.payloadString === "true") {
-          document.getElementById("out_light_img").src = "images/exposure.svg"
-            document.getElementById("outdoor_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
-        } else {
-          document.getElementById("out_light_img").src = "images/no-exposure.svg"
-            document.getElementById("outdoor_light_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+    if (isOutdoorSensorActive) {
+        if (message.destinationName === "smarthouse/outdoor_light/trigger") {
+            if (message.payloadString === "true") {
+                document.getElementById("out_light_img").src = "images/exposure.svg"
+                document.getElementById("outdoor_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
+            } else {
+                document.getElementById("out_light_img").src = "images/no-exposure.svg"
+                document.getElementById("outdoor_light_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+            }
+
+        }
+    }
+
+    if (message.destinationName === "smarthouse/bt_fan1/mode") {
+        if (isBTfanOn === 1) {
+            document.getElementById("bt_fan_mode_img").src = "images/half-moon.svg";
+
+            isBTfanOn = 2
+        } else if (isBTfanOn === 2) {
+            document.getElementById("bt_fan_mode_img").src = "images/wind.svg";
+
+            isBTfanOn = 3
+        } else if (isBTfanOn === 3) {
+            document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg"
+
+            isBTfanOn = 1
         }
 
     }
-  }
 
-if (message.destinationName === "smarthouse/bt_fan1/mode") {
-  if(isBTfanOn===1 ){
-    document.getElementById("bt_fan_mode_img").src = "images/half-moon.svg";
-
-    isBTfanOn=2
-  }else if(isBTfanOn===2){
-    document.getElementById("bt_fan_mode_img").src = "images/wind.svg";
-
-    isBTfanOn=3
-  }else if(isBTfanOn===3){
-    document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg"
-
-    isBTfanOn=1
-  }
-
-}
-
-  if (message.destinationName === "smarthouse/bt_fan1/state") {
-    if (message.payloadString === "on") {
-        document.getElementById("bt_fan_checkbox").checked = true;
-        document.getElementById("bt_fan_mode_img").src="images/bt-fan-on-standard.svg";
-        isBTfanOn=1;
+    if (message.destinationName === "smarthouse/bt_fan1/state") {
+        if (message.payloadString === "on") {
+            document.getElementById("bt_fan_checkbox").checked = true;
+            document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg";
+            isBTfanOn = 1;
 
 
-    } else {
+        } else {
 
 
-        isBTfanOn=0;
-        btFanTimerEndTime=new Date() ;
-        timerPressed=false;
-        document.getElementById("bt_fan_checkbox").checked = false;
-        document.getElementById("bt_fan_mode_img").src="images/bt-fan-off.svg";
-        document.getElementById("bt_fan_swing_checkbox").checked = false;
-        document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
-        document.getElementById("bt_fan_timer_img").src="images/chronometer-off.svg";
-    }
-
-
-  }
-  if (message.destinationName === "smarthouse/bt_fan1/swing") {
-    if(isBTfanOn!==0){
-      if (message.payloadString === "true") {
-        document.getElementById("bt_fan_swing_checkbox").checked = true;
-          document.getElementById("bt_fan_swing_img").src="images/swing-on.svg"
-
-
-      } else {
-        document.getElementById("bt_fan_swing_checkbox").checked = false;
-          document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
-      }
-    }
-
-  }
-
-  if (message.destinationName === "smarthouse/bt_fan1/timer") {
-
-    if(isBTfanOn!==0 ){
-
-
-    if(!timerPressed){
-        btFanTimerEndTime = addMinutes(new Date(), 30);
-        timerPressed = true
-        document.getElementById("bt_fan_timer_img").src="images/chronometer.svg";
-
-    }else{
-      var updatedEndTime = addMinutes(btFanTimerEndTime, 30);
-      btFanTimerEndTime = updatedEndTime;
-
+            isBTfanOn = 0;
+            btFanTimerEndTime = new Date();
+            timerPressed = false;
+            document.getElementById("bt_fan_checkbox").checked = false;
+            document.getElementById("bt_fan_mode_img").src = "images/bt-fan-off.svg";
+            is_BTfan_swinging = false;
+            document.getElementById("bt_fan_swing_img").src = "images/swing-off.svg";
+            document.getElementById("bt_fan_timer_img").src = "images/chronometer-off.svg";
+        }
 
 
     }
-    initializeClock("bt_fan_timer_str");
+    if (message.destinationName === "smarthouse/bt_fan1/swing") {
+        if (isBTfanOn !== 0) {
+            if (message.payloadString === "true") {
+                is_BTfan_swinging = true;
+                document.getElementById("bt_fan_swing_img").src = "images/swing-on.svg"
 
 
-}
+            } else {
+                is_BTfan_swinging = false;
+                document.getElementById("bt_fan_swing_img").src = "images/swing-off.svg";
+            }
+        }
 
-  }
+    }
+
+    if (message.destinationName === "smarthouse/bt_fan1/timer") {
+
+        if (isBTfanOn !== 0) {
+
+
+            if (!timerPressed) {
+                btFanTimerEndTime = addMinutes(new Date(), 30);
+                timerPressed = true
+                document.getElementById("bt_fan_timer_img").src = "images/chronometer.svg";
+
+            } else {
+                var updatedEndTime = addMinutes(btFanTimerEndTime, 30);
+                btFanTimerEndTime = updatedEndTime;
+
+
+            }
+            initializeClock("bt_fan_timer_str");
+
+
+        }
+
+    }
 
 
     if (message.destinationName === "smarthouse/outdoor_light/state") {
@@ -350,29 +354,29 @@ if (message.destinationName === "smarthouse/bt_fan1/mode") {
     if (message.destinationName === "smarthouse/window_alarm/state") {
         if (message.payloadString === "on") {
             document.getElementById("window_alarm_checkbox").checked = true;
-            isWindowALarmActive =true;
+            isWindowALarmActive = true;
 
         } else {
-          document.getElementById("window_alarm_checkbox").checked = false;
-          isWindowALarmActive=false;
+            document.getElementById("window_alarm_checkbox").checked = false;
+            isWindowALarmActive = false;
 
         }
 
     }
-    if(isWindowALarmActive){
-    if (message.destinationName === "smarthouse/window_alarm/trigger") {
-        if (message.payloadString === "true") {
+    if (isWindowALarmActive) {
+        if (message.destinationName === "smarthouse/window_alarm/trigger") {
+            if (message.payloadString === "true") {
 
-            document.getElementById("window_img").src = "images/window-open.svg"
-            document.getElementById("window_card").style.boxShadow = "10px 12px 10px rgba(255,51,0,0.6)";
-        } else {
+                document.getElementById("window_img").src = "images/window-open.svg"
+                document.getElementById("window_card").style.boxShadow = "10px 12px 10px rgba(255,51,0,0.6)";
+            } else {
 
-            document.getElementById("window_img").src = "images/window-closed.svg"
-            document.getElementById("window_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)"
+                document.getElementById("window_img").src = "images/window-closed.svg"
+                document.getElementById("window_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)"
+            }
+
         }
-
     }
-  }
 
     if (message.destinationName === "smarthouse/oven/state") {
         if (message.payloadString === "on") {
@@ -399,43 +403,43 @@ if (message.destinationName === "smarthouse/bt_fan1/mode") {
 
     }
 
-if(isFireAlarmActive){
-    if (message.destinationName === "smarthouse/fire_alarm/trigger") {
-        if (message.payloadString === "true") {
-            document.getElementById("fire_img").src = "images/fire.svg"
-            document.getElementById("fire_alarm_card").style.boxShadow = "10px 12px 10px rgba(255,51,0,0.6)";
-        } else {
-            document.getElementById("fire_img").src = "images/no-fire.svg"
-            document.getElementById("fire_alarm_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
-        }
+    if (isFireAlarmActive) {
+        if (message.destinationName === "smarthouse/fire_alarm/trigger") {
+            if (message.payloadString === "true") {
+                document.getElementById("fire_img").src = "images/fire.svg"
+                document.getElementById("fire_alarm_card").style.boxShadow = "10px 12px 10px rgba(255,51,0,0.6)";
+            } else {
+                document.getElementById("fire_img").src = "images/no-fire.svg"
+                document.getElementById("fire_alarm_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+            }
 
+        }
     }
-}
 
     if (message.destinationName === "smarthouse/burglar_alarm/state") {
         if (message.payloadString === "on") {
             document.getElementById("burglar_alarm_checkbox").checked = true;
             isBurglarAlarmActive = true;
         } else {
-            isBurglarAlarmActive= false;
+            isBurglarAlarmActive = false;
             document.getElementById("burglar_alarm_checkbox").checked = false;
             document.getElementById("burglar_alarm_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
         }
 
     }
 
-if(isBurglarAlarmActive){
-    if (message.destinationName === "smarthouse/burglar_alarm/trigger") {
-        if (message.payloadString === "true") {
-              document.getElementById("burglar_img").src = "images/siren-on.svg"
-              document.getElementById("burglar_alarm_card").style.boxShadow = "10px 12px 10px rgba(255,51,0,0.6)";
-        } else {
-          document.getElementById("burglar_img").src = "images/siren-off.svg"
-            document.getElementById("burglar_alarm_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
-        }
+    if (isBurglarAlarmActive) {
+        if (message.destinationName === "smarthouse/burglar_alarm/trigger") {
+            if (message.payloadString === "true") {
+                document.getElementById("burglar_img").src = "images/siren-on.svg"
+                document.getElementById("burglar_alarm_card").style.boxShadow = "10px 12px 10px rgba(255,51,0,0.6)";
+            } else {
+                document.getElementById("burglar_img").src = "images/siren-off.svg"
+                document.getElementById("burglar_alarm_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+            }
 
+        }
     }
-}
     if (message.destinationName === "smarthouse/heater_1/state") {
         if (message.payloadString === "on") {
             document.getElementById("heater1_checkbox").checked = true
@@ -448,7 +452,7 @@ if(isBurglarAlarmActive){
     if (message.destinationName === "smarthouse/heater_1/value") {
 
 
-        if (isNaN(message.payloadString)===false) {
+        if (isNaN(message.payloadString) === false) {
             document.getElementById("sliderHeater1").value = message.payloadString
             document.getElementById("goal_temperature_heater1").innerHTML = '<span> ' + document.getElementById("sliderHeater1").value + ' °C</span><br/>';
         }
@@ -466,7 +470,7 @@ if(isBurglarAlarmActive){
     if (message.destinationName === "smarthouse/heater_2/value") {
 
 
-        if (isNaN(message.payloadString)===false) {
+        if (isNaN(message.payloadString) === false) {
             document.getElementById("sliderHeater2").value = message.payloadString
             document.getElementById("goal_temperature_heater2").innerHTML = '<span> ' + document.getElementById("sliderHeater2").value + ' °C</span><br/>';
         }
@@ -476,7 +480,7 @@ if(isBurglarAlarmActive){
     if (message.destinationName === "smarthouse/fan/speed") {
 
 
-        if (isNaN(message.payloadString)===false) {
+        if (isNaN(message.payloadString) === false) {
             document.getElementById("sliderFan").value = message.payloadString
             document.getElementById("fan_speed_str").innerHTML = '<span> ' + document.getElementById("sliderFan").value + '</span><br/>';
         }
@@ -486,151 +490,167 @@ if(isBurglarAlarmActive){
     if (message.destinationName === "smarthouse/bt_light1/state") {
 
 
-        if (message.payloadString==="0000") {
-            document.getElementById("bt_light_checkbox1").checked = false;
-            document.getElementById("bt_light_checkbox2").checked = false;
-            document.getElementById("bt_light_checkbox3").checked = false;
-            document.getElementById("bt_light_checkbox4").checked = false;
+        if (message.payloadString === "0000") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = false;
+            is_BTLight3_on = false;
+            is_BTLight4_on = false;
             document.getElementById("bt_light_img1").src = "images/light-off.svg"
             document.getElementById("bt_light_img2").src = "images/light-off.svg"
             document.getElementById("bt_light_img3").src = "images/light-off.svg"
             document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        } else if (message.payloadString==="0001"){
-          document.getElementById("bt_light_checkbox1").checked = false;
-          document.getElementById("bt_light_checkbox2").checked = false;
-          document.getElementById("bt_light_checkbox3").checked = false;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-off.svg"
-          document.getElementById("bt_light_img2").src = "images/light-off.svg"
-          document.getElementById("bt_light_img3").src = "images/light-off.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else if (message.payloadString==="0010") {
-          document.getElementById("bt_light_checkbox1").checked = false;
-          document.getElementById("bt_light_checkbox2").checked = false;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = false;
-          document.getElementById("bt_light_img1").src = "images/light-off.svg"
-          document.getElementById("bt_light_img2").src = "images/light-off.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        }else if (message.payloadString==="0011") {
-          document.getElementById("bt_light_checkbox1").checked = false;
-          document.getElementById("bt_light_checkbox2").checked = false;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-off.svg"
-          document.getElementById("bt_light_img2").src = "images/light-off.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else if (message.payloadString==="0100") {
-          document.getElementById("bt_light_checkbox1").checked = false;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = false;
-          document.getElementById("bt_light_checkbox4").checked = false;
-          document.getElementById("bt_light_img1").src = "images/light-off.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-off.svg"
-          document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        }else if (message.payloadString==="0101") {
-          document.getElementById("bt_light_checkbox1").checked = false;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = false;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-off.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-off.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else if (message.payloadString==="0110") {
-          document.getElementById("bt_light_checkbox1").checked = false;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = false;
-          document.getElementById("bt_light_img1").src = "images/light-off.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        }else if (message.payloadString==="0111") {
-          document.getElementById("bt_light_checkbox1").checked = false;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-off.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else if (message.payloadString==="1000") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = false;
-          document.getElementById("bt_light_checkbox3").checked = false;
-          document.getElementById("bt_light_checkbox4").checked = false;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-off.svg"
-          document.getElementById("bt_light_img3").src = "images/light-off.svg"
-          document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        }else if (message.payloadString==="1001") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = false;
-          document.getElementById("bt_light_checkbox3").checked = false;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-off.svg"
-          document.getElementById("bt_light_img3").src = "images/light-off.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else if (message.payloadString==="1010") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = false;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = false;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-off.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        }else if (message.payloadString==="1011") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = false;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-off.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else if (message.payloadString==="1100") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = false;
-          document.getElementById("bt_light_checkbox4").checked = false;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-off.svg"
-          document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        }else if (message.payloadString==="1101") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = false;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-off.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else if (message.payloadString==="1110") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = false;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-off.svg"
-        }else if (message.payloadString==="1111") {
-          document.getElementById("bt_light_checkbox1").checked = true;
-          document.getElementById("bt_light_checkbox2").checked = true;
-          document.getElementById("bt_light_checkbox3").checked = true;
-          document.getElementById("bt_light_checkbox4").checked = true;
-          document.getElementById("bt_light_img1").src = "images/light-on.svg"
-          document.getElementById("bt_light_img2").src = "images/light-on.svg"
-          document.getElementById("bt_light_img3").src = "images/light-on.svg"
-          document.getElementById("bt_light_img4").src = "images/light-on.svg"
-        }else{
+            document.getElementById("bt_light_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+        } else if (message.payloadString === "0001") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = false;
+            is_BTLight3_on = false;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.2)";
+        } else if (message.payloadString === "0010") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = false;
+            is_BTLight3_on = true;
+            is_BTLight4_on = false;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg"
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.2)";
+        } else if (message.payloadString === "0011") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = false;
+            is_BTLight3_on = true;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.3)";
+        } else if (message.payloadString === "0100") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = true;
+            is_BTLight3_on = false;
+            is_BTLight4_on = false;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.2)";
+        } else if (message.payloadString === "0101") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = true;
+            is_BTLight3_on = false;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.3)";
+        } else if (message.payloadString === "0110") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = true;
+            is_BTLight3_on = true;
+            is_BTLight4_on = false;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg";
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.3)";
+        } else if (message.payloadString === "0111") {
+            is_BTLight1_on = false;
+            is_BTLight2_on = true;
+            is_BTLight3_on = true;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.4)";
+        } else if (message.payloadString === "1000") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = false;
+            is_BTLight3_on = false;
+            is_BTLight4_on = false;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.2)";
+        } else if (message.payloadString === "1001") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = false;
+            is_BTLight3_on = false;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.3)";
+        } else if (message.payloadString === "1010") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = false;
+            is_BTLight3_on = true;
+            is_BTLight4_on = false;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg"
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.3)";
+        } else if (message.payloadString === "1011") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = false;
+            is_BTLight3_on = true;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.4)";
+        } else if (message.payloadString === "1100") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = true;
+            is_BTLight3_on = false;
+            is_BTLight4_on = false;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.3)";
+        } else if (message.payloadString === "1101") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = true;
+            is_BTLight3_on = false;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.4)";
+        } else if (message.payloadString === "1110") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = true;
+            is_BTLight3_on = true;
+            is_BTLight4_on = false;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg"
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.4)";
+        } else if (message.payloadString === "1111") {
+            is_BTLight1_on = true;
+            is_BTLight2_on = true;
+            is_BTLight3_on = true;
+            is_BTLight4_on = true;
+            document.getElementById("bt_light_img1").src = "images/light-on.svg"
+            document.getElementById("bt_light_img2").src = "images/light-on.svg"
+            document.getElementById("bt_light_img3").src = "images/light-on.svg"
+            document.getElementById("bt_light_img4").src = "images/light-on.svg"
+            document.getElementById("bt_light_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
+        } else {
 
         }
 
@@ -640,311 +660,342 @@ if(isBurglarAlarmActive){
 }
 
 // Called when the disconnection button is pressed
-    function startDisconnect() {
-        client.disconnect();
+function startDisconnect() {
+    client.disconnect();
+}
+
+function checkIndoorLightState() {
+
+    if (document.getElementById("indoor_light_checkbox").checked === true) {
+        client.send("smarthouse/indoor_light/state", "on", 0, true);
+    } else {
+        client.send("smarthouse/indoor_light/state", "off", 0, true);
     }
+}
 
-    function checkIndoorLightState() {
+function checkBtLampState() {
 
-        if (document.getElementById("indoor_light_checkbox").checked === true) {
-            client.send("smarthouse/indoor_light/state", "on", 0, true);
-        } else {
-            client.send("smarthouse/indoor_light/state", "off", 0, true);
-        }
+    if (document.getElementById("bt_lamp_checkbox").checked === true) {
+        client.send("smarthouse/bt_lamp1/state", "on", 0, true);
+    } else {
+        client.send("smarthouse/bt_lamp1/state", "off", 0, true);
     }
+}
 
-    function checkBtLampState() {
+function checkOutdoorLightSensorState() {
 
-        if (document.getElementById("bt_lamp_checkbox").checked === true) {
-            client.send("smarthouse/bt_lamp1/state", "on", 0, true);
-        } else {
-            client.send("smarthouse/bt_lamp1/state", "off", 0, true);
-        }
+    if (document.getElementById("outdoor_light_sensor_checkbox").checked === true) {
+        client.send("smarthouse/outdoor_light/state", "on", 0, true);
+        isOutdoorSensorActive = true;
+    } else {
+        client.send("smarthouse/outdoor_light/state", "off", 0, true);
+        isOutdoorSensorActive = false;
     }
+}
 
-    function checkOutdoorLightSensorState() {
+function checkFireAlarmState() {
 
-        if (document.getElementById("outdoor_light_sensor_checkbox").checked === true) {
-            client.send("smarthouse/outdoor_light/state", "on", 0, true);
-            isOutdoorSensorActive = true;
-        } else {
-            client.send("smarthouse/outdoor_light/state", "off", 0, true);
-            isOutdoorSensorActive = false;
-        }
+    if (document.getElementById("fire_alarm_checkbox").checked === true) {
+        client.send("smarthouse/fire_alarm/state", "on", 0, true);
+        isFireAlarmActive = true;
+    } else {
+        client.send("smarthouse/fire_alarm/state", "off", 0, true);
+        isFireAlarmActive = false;
     }
+}
 
-    function checkFireAlarmState() {
+function checkWindowAlarmState() {
 
-        if (document.getElementById("fire_alarm_checkbox").checked === true) {
-            client.send("smarthouse/fire_alarm/state", "on", 0, true);
-            isFireAlarmActive = true;
-        } else {
-            client.send("smarthouse/fire_alarm/state", "off", 0, true);
-            isFireAlarmActive = false;
-        }
+    if (document.getElementById("window_alarm_checkbox").checked === true) {
+        client.send("smarthouse/window_alarm/state", "on", 0, true);
+        isWindowALarmActive = true;
+    } else {
+        client.send("smarthouse/window_alarm/state", "off", 0, true);
+        isWindowALarmActive = false;
     }
-
-    function checkWindowAlarmState() {
-
-        if (document.getElementById("window_alarm_checkbox").checked === true) {
-            client.send("smarthouse/window_alarm/state", "on", 0, true);
-            isWindowALarmActive=true;
-        } else {
-            client.send("smarthouse/window_alarm/state", "off", 0, true);
-            isWindowALarmActive=false;
-        }
-    }
+}
 
 
-    function checkBurglarAlarmState() {
+function checkBurglarAlarmState() {
 
-        if (document.getElementById("burglar_alarm_checkbox").checked === true) {
-            client.send("smarthouse/burglar_alarm/state", "on", 0, true);
-            isBurglarAlarmActive = true;
+    if (document.getElementById("burglar_alarm_checkbox").checked === true) {
+        client.send("smarthouse/burglar_alarm/state", "on", 0, true);
+        isBurglarAlarmActive = true;
 
-        } else {
-            client.send("smarthouse/burglar_alarm/state", "off", 0, true);
-            isBurglarAlarmActive =false;
-
-        }
-    }
-
-
-    function checkHeater1State() {
-
-        if (document.getElementById("heater1_checkbox").checked === true) {
-            client.send("smarthouse/heater_1/state", "on", 0, true);
-        } else {
-            client.send("smarthouse/heater_1/state", "off", 0, true);
-        }
-    }
-
-    function setHeater1Temperature() {
-      var temp = document.getElementById("sliderHeater1").value
-
-            client.send("smarthouse/heater_1/value", temp, 0, true);
+    } else {
+        client.send("smarthouse/burglar_alarm/state", "off", 0, true);
+        isBurglarAlarmActive = false;
 
     }
+}
 
-    function checkHeater2State() {
 
-        if (document.getElementById("heater2_checkbox").checked === true) {
-            client.send("smarthouse/heater_2/state", "on", 0, true);
-        } else {
-            client.send("smarthouse/heater_2/state", "off", 0, true);
-        }
+function checkHeater1State() {
+
+    if (document.getElementById("heater1_checkbox").checked === true) {
+        client.send("smarthouse/heater_1/state", "on", 0, true);
+    } else {
+        client.send("smarthouse/heater_1/state", "off", 0, true);
     }
+}
 
-    function setHeater2Temperature() {
-      var temp = document.getElementById("sliderHeater2").value
+function setHeater1Temperature() {
+    var temp = document.getElementById("sliderHeater1").value
 
-            client.send("smarthouse/heater_2/value", temp, 0, true);
+    client.send("smarthouse/heater_1/value", temp, 0, true);
 
+}
+
+function checkHeater2State() {
+
+    if (document.getElementById("heater2_checkbox").checked === true) {
+        client.send("smarthouse/heater_2/state", "on", 0, true);
+    } else {
+        client.send("smarthouse/heater_2/state", "off", 0, true);
     }
+}
 
-    function defrost(){
+function setHeater2Temperature() {
+    var temp = document.getElementById("sliderHeater2").value
 
-    if(!isMicrowaveInUse){
+    client.send("smarthouse/heater_2/value", temp, 0, true);
+
+}
+
+function defrost() {
+
+    if (!isMicrowaveInUse) {
         client.send("smarthouse/microwave/preset_start", "defrost", 0, true);
         isMicrowaveInUse = true;
-      }else{
+    } else {
 
         client.send("smarthouse/microwave/preset_start", "ready", 0, true);
-        isMicrowaveInUse= false;
-      }
-
+        isMicrowaveInUse = false;
     }
 
-    function cookChicken(){
+}
 
-    if(!isMicrowaveInUse){
+function cookChicken() {
+
+    if (!isMicrowaveInUse) {
         client.send("smarthouse/microwave/preset_start", "chicken", 0, true);
         isMicrowaveInUse = true;
-      }else{
+    } else {
 
         client.send("smarthouse/microwave/preset_start", "ready", 0, true);
-        isMicrowaveInUse= false;
-      }
-
+        isMicrowaveInUse = false;
     }
-    function cookFish(){
 
-    if(!isMicrowaveInUse){
+}
+
+function cookFish() {
+
+    if (!isMicrowaveInUse) {
         client.send("smarthouse/microwave/preset_start", "fish", 0, true);
         isMicrowaveInUse = true;
-      }else{
+    } else {
 
         client.send("smarthouse/microwave/preset_start", "ready", 0, true);
-        isMicrowaveInUse= false;
-      }
-
+        isMicrowaveInUse = false;
     }
 
-    function checkBTLightState(){
-      var msg = '';
-      if (document.getElementById("bt_light_checkbox1").checked === true) {
-          msg = msg + '1';
-      } else {
-          msg = msg + '0';
-      }
-      if (document.getElementById("bt_light_checkbox2").checked === true) {
-          msg = msg + '1';
-      } else {
-          msg = msg + '0';
-      }
-      if (document.getElementById("bt_light_checkbox3").checked === true) {
+}
+
+function clickBtLight1() {
+    if (is_BTLight1_on) {
+        is_BTLight1_on = false;
+    } else {
+        is_BTLight1_on = true;
+    }
+    checkBTLightState();
+}
+
+function clickBtLight2() {
+    if (is_BTLight2_on) {
+        is_BTLight2_on = false;
+    } else {
+        is_BTLight2_on = true;
+    }
+    checkBTLightState();
+}
+
+function clickBtLight3() {
+    if (is_BTLight3_on) {
+        is_BTLight3_on = false;
+    } else {
+        is_BTLight3_on = true;
+    }
+    checkBTLightState();
+}
+
+function clickBtLight4() {
+    if (is_BTLight4_on) {
+        is_BTLight4_on = false;
+    } else {
+        is_BTLight4_on = true;
+    }
+    checkBTLightState();
+}
+
+function checkBTLightState() {
+    var msg = '';
+    if (is_BTLight1_on) {
         msg = msg + '1';
-      } else {
-          msg = msg + '0';
-      }
-      if (document.getElementById("bt_light_checkbox4").checked === true) {
+    } else {
+        msg = msg + '0';
+    }
+    if (is_BTLight2_on) {
         msg = msg + '1';
-      } else {
-          msg = msg + '0';
-      }
+    } else {
+        msg = msg + '0';
+    }
+    if (is_BTLight3_on) {
+        msg = msg + '1';
+    } else {
+        msg = msg + '0';
+    }
+    if (is_BTLight4_on) {
+        msg = msg + '1';
+    } else {
+        msg = msg + '0';
+    }
 
-      client.send("smarthouse/bt_light1/state", msg, 0, true);
+    client.send("smarthouse/bt_light1/state", msg, 0, true);
+
+}
+
+function setFanSpeed() {
+
+    var temp = document.getElementById("sliderFan").value
+
+    client.send("smarthouse/fan/speed", temp, 0, true);
+
+
+}
+
+
+function checkBTfanMode() {
+
+    if (isBTfanOn !== 0) {
+        client.send("smarthouse/bt_fan1/mode", "on", 0, true);
 
     }
 
-    function setFanSpeed() {
+}
 
-      var temp = document.getElementById("sliderFan").value
-
-      client.send("smarthouse/fan/speed", temp, 0, true);
-
-
-    }
-
-
-    function checkBTfanMode(){
-
-      if(isBTfanOn===1){
-        document.getElementById("bt_fan_mode_img").src = "images/half-moon.svg";
-        client.send("smarthouse/bt_fan1/mode", "on", 0, true);
-        isBTfanOn=2
-      }else if(isBTfanOn===2){
-        document.getElementById("bt_fan_mode_img").src = "images/wind.svg";
-        client.send("smarthouse/bt_fan1/mode", "on", 0, true);
-        isBTfanOn=3
-      }else if(isBTfanOn===3){
-        document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg"
-        client.send("smarthouse/bt_fan1/mode", "on", 0, true);
-        isBTfanOn=1
-      }
-    }
-
-  function checkBTfanState(){
+function checkBTfanState() {
 
     if (document.getElementById("bt_fan_checkbox").checked === true) {
         client.send("smarthouse/bt_fan1/state", "on", 0, true);
         document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg"
-        isBTfanOn=1;
+        isBTfanOn = 1;
 
 
     } else {
 
         client.send("smarthouse/bt_fan1/state", "off", 0, true);
-        isBTfanOn=0;
-        btFanTimerEndTime=new Date() ;
-        timerPressed=false;
-        document.getElementById("bt_fan_swing_checkbox").checked = false;
-        document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
-        document.getElementById("bt_fan_timer_img").src="images/chronometer-off.svg";
+        isBTfanOn = 0;
+        btFanTimerEndTime = new Date();
+        timerPressed = false;
+        is_BTfan_swinging = false;
+        document.getElementById("bt_fan_swing_img").src = "images/swing-off.svg";
+        document.getElementById("bt_fan_timer_img").src = "images/chronometer-off.svg";
     }
-
-
-  }
-
-  function checkBTfanSwingState(){
-    if(isBTfanOn!==0){
-      if (document.getElementById("bt_fan_swing_checkbox").checked === true) {
-          client.send("smarthouse/bt_fan1/swing", "true", 0, true);
-          document.getElementById("bt_fan_swing_img").src="images/swing-on.svg"
-
-
-      } else {
-          client.send("smarthouse/bt_fan1/swing", "false", 0, true);
-          document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
-      }
-    }
-  }
-
-  function addTimeBTfan(){
-    if(isBTfanOn!==0 ){
-    client.send("smarthouse/bt_fan1/timer", "on", 0, true);
-
-    if(!timerPressed){
-        btFanTimerEndTime = addMinutes(new Date(), 30);
-        timerPressed = true
-        document.getElementById("bt_fan_timer_img").src="images/chronometer.svg";
-
-    }else{
-      var updatedEndTime = addMinutes(btFanTimerEndTime, 30);
-      btFanTimerEndTime = updatedEndTime;
-
-
-
-    }
-    initializeClock("bt_fan_timer_str");
 
 
 }
-  }
 
-  function addMinutes(date, minutes) {
-      return new Date(date.getTime() + minutes*60000);
-  }
+function checkBTfanSwingState() {
+    if (isBTfanOn !== 0) {
 
-  function getTimeRemaining(endtime){
-  var t = Date.parse(endtime) - Date.parse(new Date());
-  if (t>27000000){
-    t=0;
-    btFanTimerEndTime = new Date();
-  }
-  var seconds = Math.floor( (t/1000) % 60 );
-  var minutes = Math.floor( (t/1000/60) % 60 );
-  var hours = Math.floor( (t/(1000*60*60)) % 24 );
-  var days = Math.floor( t/(1000*60*60*24) );
-  return {
-    'total': t,
-    'days': days,
-    'hours': hours,
-    'minutes': minutes,
-    'seconds': seconds
-  };
+        if (is_BTfan_swinging) {
+            client.send("smarthouse/bt_fan1/swing", "false", 0, true);
+            document.getElementById("bt_fan_swing_img").src = "images/swing-off.svg";
+            is_BTfan_swinging = false;
+        } else {
+            client.send("smarthouse/bt_fan1/swing", "true", 0, true);
+            document.getElementById("bt_fan_swing_img").src = "images/swing-on.svg"
+            is_BTfan_swinging = true;
+        }
+
+    }
+}
+
+function addTimeBTfan() {
+    if (isBTfanOn !== 0) {
+        client.send("smarthouse/bt_fan1/timer", "on", 0, true);
+
+        /*if(!timerPressed){
+            btFanTimerEndTime = addMinutes(new Date(), 30);
+            timerPressed = true
+            document.getElementById("bt_fan_timer_img").src="images/chronometer.svg";
+
+        }else{
+          var updatedEndTime = addMinutes(btFanTimerEndTime, 30);
+          btFanTimerEndTime = updatedEndTime;
+
+
+
+        }
+        initializeClock("bt_fan_timer_str");*/
+
+
+    }
+}
+
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes * 60000);
+}
+
+function getTimeRemaining(endtime) {
+    var t = Date.parse(endtime) - Date.parse(new Date());
+    if (t > 27000000) {
+        t = 0;
+        btFanTimerEndTime = new Date();
+    }
+    var seconds = Math.floor((t / 1000) % 60);
+    var minutes = Math.floor((t / 1000 / 60) % 60);
+    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    var days = Math.floor(t / (1000 * 60 * 60 * 24));
+    return {
+        'total': t,
+        'days': days,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds
+    };
 }
 
 
 function initializeClock(id) {
 
-  var clock = document.getElementById(id);
+    var clock = document.getElementById(id);
 
 
-  function updateClock() {
-    var t = getTimeRemaining(btFanTimerEndTime);
-    clock.innerHTML =  ('0' + t.hours).slice(-2) + ':' + ('0' + t.minutes).slice(-2) + ':' + ('0' + t.seconds).slice(-2);
+    function updateClock() {
+        var t = getTimeRemaining(btFanTimerEndTime);
+        clock.innerHTML = ('0' + t.hours).slice(-2) + ':' + ('0' + t.minutes).slice(-2) + ':' + ('0' + t.seconds).slice(-2);
 
 
-    if (t.total <= 0) {
-      clearInterval(timeinterval);
-      clock.innerHTML = '00:00:00 ';
+        if (t.total <= 0) {
+            clearInterval(timeinterval);
+            clock.innerHTML = '00:00:00 ';
 
+        }
     }
-  }
 
-  updateClock();
-  var timeinterval = setInterval(updateClock, 1000);
+    updateClock();
+    var timeinterval = setInterval(updateClock, 1000);
 }
 
 // Set the width of the side navigation to 250px and the left margin of the page content to 250px
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
-    }
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
 
 // Set the width of the side navigation to 0 and the left margin of the page content to 0
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
-    }
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+}

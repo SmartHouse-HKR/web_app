@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f2f81a42-1725-41df-8c10-1d4062c7c4f8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/dashboard_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/dashboard_style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/hivemqtt.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/hivemqtt.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -110,6 +112,7 @@
       <workItem from="1573650149156" duration="2634000" />
       <workItem from="1573674226984" duration="473000" />
       <workItem from="1576505482691" duration="2801000" />
+      <workItem from="1578344619348" duration="1921000" />
     </task>
     <servers />
   </component>
