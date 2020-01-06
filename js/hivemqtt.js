@@ -6,6 +6,7 @@
     let isBTfanOn= 0;
     let timerPressed = false ;
     let btFanTimerEndTime ;
+    let isMicrowaveInUse = false;
 
 // Called after form input is processed
 function startLogin() {
@@ -138,6 +139,7 @@ function onConnect() {
     client.subscribe("smarthouse/bt_fan1/timer");
     client.subscribe("smarthouse/bt_fan1/mode");
     client.subscribe("smarthouse/bt_lamp1/state");
+    client.subscribe("smarthouse/microwave/preset_start");
 
 
 }
@@ -166,6 +168,26 @@ function onMessageArrived(message) {
             document.getElementById("in_light_img").src = "images/light-off.svg"
             document.getElementById("indoor_light_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
         }
+
+    }
+
+    if (message.destinationName === "smarthouse/microwave/preset_start") {
+
+        if (message.payloadString === "defrost") {
+
+            document.getElementById("bt_defrost_img").src = "images/defrost-on.svg"
+            document.getElementById("bt_microwave_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
+        } else if (message.payloadString === "chicken") {
+            document.getElementById("bt_chicken_img").src = "images/chicken-on.svg"
+            document.getElementById("bt_microwave_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
+        }else if (message.payloadString === "fish") {
+            document.getElementById("bt_fish_img").src = "images/fish-on.svg"
+            document.getElementById("bt_microwave_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
+        }else {
+            document.getElementById("bt_defrost_img").src = "images/defrost.svg"
+            document.getElementById("bt_chicken_img").src = "images/chicken.svg"
+            document.getElementById("bt_fish_img").src = "images/fish.svg"
+            document.getElementById("bt_microwave_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";  }
 
     }
 
@@ -717,6 +739,44 @@ if(isBurglarAlarmActive){
       var temp = document.getElementById("sliderHeater2").value
 
             client.send("smarthouse/heater_2/value", temp, 0, true);
+
+    }
+
+    function defrost(){
+
+    if(!isMicrowaveInUse){
+        client.send("smarthouse/microwave/preset_start", "defrost", 0, true);
+        isMicrowaveInUse = true;
+      }else{
+
+        client.send("smarthouse/microwave/preset_start", "ready", 0, true);
+        isMicrowaveInUse= false;
+      }
+
+    }
+
+    function cookChicken(){
+
+    if(!isMicrowaveInUse){
+        client.send("smarthouse/microwave/preset_start", "chicken", 0, true);
+        isMicrowaveInUse = true;
+      }else{
+
+        client.send("smarthouse/microwave/preset_start", "ready", 0, true);
+        isMicrowaveInUse= false;
+      }
+
+    }
+    function cookFish(){
+
+    if(!isMicrowaveInUse){
+        client.send("smarthouse/microwave/preset_start", "fish", 0, true);
+        isMicrowaveInUse = true;
+      }else{
+
+        client.send("smarthouse/microwave/preset_start", "ready", 0, true);
+        isMicrowaveInUse= false;
+      }
 
     }
 
