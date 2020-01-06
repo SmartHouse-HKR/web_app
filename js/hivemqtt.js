@@ -3,6 +3,9 @@
     let isBurglarAlarmActive = false;
     let isWindowALarmActive = false;
     let isOutdoorSensorActive = false;
+    let isBTfanOn= 0;
+    let timerPressed = false ;
+    let btFanTimerEndTime ;
 
 // Called after form input is processed
 function startLogin() {
@@ -80,7 +83,7 @@ function onLoadDashboard() {
       document.getElementById("goal_temperature_heater2").innerHTML = '<span> ' + range2.value + ' °C</span><br/>';
     }
 
-
+    document.getElementById("bt_fan_timer_str").innerHTML = '<span> 00:00:00</span>';
 }
 
 
@@ -130,6 +133,10 @@ function onConnect() {
     client.subscribe("smarthouse/window_alarm/state");
     client.subscribe("smarthouse/window_alarm/trigger");
     client.subscribe("smarthouse/bt_light1/state");
+    client.subscribe("smarthouse/bt_fan1/state");
+    client.subscribe("smarthouse/bt_fan1/swing");
+    client.subscribe("smarthouse/bt_fan1/timer");
+    client.subscribe("smarthouse/bt_fan1/mode");
 
 
 }
@@ -173,6 +180,85 @@ if(isOutdoorSensorActive){
 
     }
   }
+
+if (message.destinationName === "smarthouse/bt_fan1/mode") {
+  if(isBTfanOn===1 ){
+    document.getElementById("bt_fan_mode_img").src = "images/half-moon.svg";
+
+    isBTfanOn=2
+  }else if(isBTfanOn===2){
+    document.getElementById("bt_fan_mode_img").src = "images/wind.svg";
+
+    isBTfanOn=3
+  }else if(isBTfanOn===3){
+    document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg"
+
+    isBTfanOn=1
+  }
+
+}
+
+  if (message.destinationName === "smarthouse/bt_fan1/state") {
+    if (message.payloadString === "on") {
+        document.getElementById("bt_fan_checkbox").checked = true;
+        document.getElementById("bt_fan_mode_img").src="images/bt-fan-on-standard.svg";
+        isBTfanOn=1;
+
+
+    } else {
+
+
+        isBTfanOn=0;
+        btFanTimerEndTime=new Date() ;
+        timerPressed=false;
+        document.getElementById("bt_fan_checkbox").checked = false;
+        document.getElementById("bt_fan_mode_img").src="images/bt-fan-off.svg";
+        document.getElementById("bt_fan_swing_checkbox").checked = false;
+        document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
+        document.getElementById("bt_fan_timer_img").src="images/chronometer-off.svg";
+    }
+
+
+  }
+  if (message.destinationName === "smarthouse/bt_fan1/swing") {
+    if(isBTfanOn!==0){
+      if (message.payloadString === "true") {
+        document.getElementById("bt_fan_swing_checkbox").checked = true;
+          document.getElementById("bt_fan_swing_img").src="images/swing-on.svg"
+
+
+      } else {
+        document.getElementById("bt_fan_swing_checkbox").checked = false;
+          document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
+      }
+    }
+
+  }
+
+  if (message.destinationName === "smarthouse/bt_fan1/timer") {
+
+    if(isBTfanOn!==0 ){
+
+
+    if(!timerPressed){
+        btFanTimerEndTime = addMinutes(new Date(), 30);
+        timerPressed = true
+        document.getElementById("bt_fan_timer_img").src="images/chronometer.svg";
+
+    }else{
+      var updatedEndTime = addMinutes(btFanTimerEndTime, 30);
+      btFanTimerEndTime = updatedEndTime;
+
+
+
+    }
+    initializeClock("bt_fan_timer_str");
+
+
+}
+
+  }
+
 
     if (message.destinationName === "smarthouse/outdoor_light/state") {
         if (message.payloadString === "on") {
@@ -648,7 +734,125 @@ if(isBurglarAlarmActive){
     }
 
 
+    function checkBTfanMode(){
 
+      if(isBTfanOn===1){
+        document.getElementById("bt_fan_mode_img").src = "images/half-moon.svg";
+        client.send("smarthouse/bt_fan1/mode", "on", 0, true);
+        isBTfanOn=2
+      }else if(isBTfanOn===2){
+        document.getElementById("bt_fan_mode_img").src = "images/wind.svg";
+        client.send("smarthouse/bt_fan1/mode", "on", 0, true);
+        isBTfanOn=3
+      }else if(isBTfanOn===3){
+        document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg"
+        client.send("smarthouse/bt_fan1/mode", "on", 0, true);
+        isBTfanOn=1
+      }
+    }
+
+  function checkBTfanState(){
+
+    if (document.getElementById("bt_fan_checkbox").checked === true) {
+        client.send("smarthouse/bt_fan1/state", "on", 0, true);
+        document.getElementById("bt_fan_mode_img").src = "images/bt-fan-on-standard.svg"
+        isBTfanOn=1;
+
+
+    } else {
+
+        client.send("smarthouse/bt_fan1/state", "off", 0, true);
+        isBTfanOn=0;
+        btFanTimerEndTime=new Date() ;
+        timerPressed=false;
+        document.getElementById("bt_fan_swing_checkbox").checked = false;
+        document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
+        document.getElementById("bt_fan_timer_img").src="images/chronometer-off.svg";
+    }
+
+
+  }
+
+  function checkBTfanSwingState(){
+    if(isBTfanOn!==0){
+      if (document.getElementById("bt_fan_swing_checkbox").checked === true) {
+          client.send("smarthouse/bt_fan1/swing", "true", 0, true);
+          document.getElementById("bt_fan_swing_img").src="images/swing-on.svg"
+
+
+      } else {
+          client.send("smarthouse/bt_fan1/swing", "false", 0, true);
+          document.getElementById("bt_fan_swing_img").src="images/swing-off.svg";
+      }
+    }
+  }
+
+  function addTimeBTfan(){
+    if(isBTfanOn!==0 ){
+    client.send("smarthouse/bt_fan1/timer", "on", 0, true);
+
+    if(!timerPressed){
+        btFanTimerEndTime = addMinutes(new Date(), 30);
+        timerPressed = true
+        document.getElementById("bt_fan_timer_img").src="images/chronometer.svg";
+
+    }else{
+      var updatedEndTime = addMinutes(btFanTimerEndTime, 30);
+      btFanTimerEndTime = updatedEndTime;
+
+
+
+    }
+    initializeClock("bt_fan_timer_str");
+
+
+}
+  }
+
+  function addMinutes(date, minutes) {
+      return new Date(date.getTime() + minutes*60000);
+  }
+
+  function getTimeRemaining(endtime){
+  var t = Date.parse(endtime) - Date.parse(new Date());
+  if (t>27000000){
+    t=0;
+    btFanTimerEndTime = new Date();
+  }
+  var seconds = Math.floor( (t/1000) % 60 );
+  var minutes = Math.floor( (t/1000/60) % 60 );
+  var hours = Math.floor( (t/(1000*60*60)) % 24 );
+  var days = Math.floor( t/(1000*60*60*24) );
+  return {
+    'total': t,
+    'days': days,
+    'hours': hours,
+    'minutes': minutes,
+    'seconds': seconds
+  };
+}
+
+
+function initializeClock(id) {
+
+  var clock = document.getElementById(id);
+
+
+  function updateClock() {
+    var t = getTimeRemaining(btFanTimerEndTime);
+    clock.innerHTML =  ('0' + t.hours).slice(-2) + ':' + ('0' + t.minutes).slice(-2) + ':' + ('0' + t.seconds).slice(-2);
+
+
+    if (t.total <= 0) {
+      clearInterval(timeinterval);
+      clock.innerHTML = '00:00:00 ';
+
+    }
+  }
+
+  updateClock();
+  var timeinterval = setInterval(updateClock, 1000);
+}
 
 // Set the width of the side navigation to 250px and the left margin of the page content to 250px
     function openNav() {
