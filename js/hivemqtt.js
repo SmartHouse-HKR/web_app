@@ -1,5 +1,5 @@
 
-  //  let isFireAlarmActive = false;
+    let isFireAlarmActive = false;
     let isBurglarAlarmActive = false;
     let isWindowALarmActive = false;
 
@@ -135,7 +135,7 @@ function onConnect() {
 function onConnectionLost(responseObject) {
 
     console.log("connection lost")
-      document.getElementById("disconnected_str").innerHTML = '<span>DISCONNECTED FROM THE SERVER</span>';
+
 }
 
 // Called when a message arrives
