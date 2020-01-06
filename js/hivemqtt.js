@@ -2,6 +2,7 @@
     let isFireAlarmActive = false;
     let isBurglarAlarmActive = false;
     let isWindowALarmActive = false;
+    let isOutdoorSensorActive = false;
 
 // Called after form input is processed
 function startLogin() {
@@ -9,7 +10,7 @@ function startLogin() {
     // Generate a random client ID
     clientID = "clientID-" + parseInt(Math.random() * 100);
 
-    host = "127.0.0.1";
+    host = "broker.mqttdashboard.com";
     port = "8000";
 
     console.log(host)
@@ -128,6 +129,8 @@ function onConnect() {
     client.subscribe("smarthouse/oven/state")
     client.subscribe("smarthouse/window_alarm/state");
     client.subscribe("smarthouse/window_alarm/trigger");
+    client.subscribe("smarthouse/bt_light1/state");
+
 
 }
 
@@ -158,6 +161,7 @@ function onMessageArrived(message) {
 
     }
 
+if(isOutdoorSensorActive){
     if (message.destinationName === "smarthouse/outdoor_light/trigger") {
         if (message.payloadString === "true") {
           document.getElementById("out_light_img").src = "images/exposure.svg"
@@ -168,13 +172,18 @@ function onMessageArrived(message) {
         }
 
     }
+  }
 
     if (message.destinationName === "smarthouse/outdoor_light/state") {
         if (message.payloadString === "on") {
             document.getElementById("outdoor_light_sensor_checkbox").checked = true
+            isOutdoorSensorActive = true;
         } else {
             document.getElementById("outdoor_light_sensor_checkbox").checked = false
+            document.getElementById("out_light_img").src = "images/no-exposure.svg";
+
             document.getElementById("outdoor_light_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+            isOutdoorSensorActive = false;
         }
 
     }
@@ -260,6 +269,8 @@ function onMessageArrived(message) {
             isFireAlarmActive = true;
         } else {
             document.getElementById("fire_alarm_checkbox").checked = false;
+            document.getElementById("fire_img").src = "images/no-fire.svg"
+
             isFireAlarmActive = false;
             document.getElementById("fire_alarm_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
         }
@@ -350,6 +361,160 @@ if(isBurglarAlarmActive){
 
     }
 
+    if (message.destinationName === "smarthouse/bt_light1/state") {
+
+
+        if (message.payloadString==="0000") {
+            document.getElementById("bt_light_checkbox1").checked = false;
+            document.getElementById("bt_light_checkbox2").checked = false;
+            document.getElementById("bt_light_checkbox3").checked = false;
+            document.getElementById("bt_light_checkbox4").checked = false;
+            document.getElementById("bt_light_img1").src = "images/light-off.svg"
+            document.getElementById("bt_light_img2").src = "images/light-off.svg"
+            document.getElementById("bt_light_img3").src = "images/light-off.svg"
+            document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        } else if (message.payloadString==="0001"){
+          document.getElementById("bt_light_checkbox1").checked = false;
+          document.getElementById("bt_light_checkbox2").checked = false;
+          document.getElementById("bt_light_checkbox3").checked = false;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-off.svg"
+          document.getElementById("bt_light_img2").src = "images/light-off.svg"
+          document.getElementById("bt_light_img3").src = "images/light-off.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else if (message.payloadString==="0010") {
+          document.getElementById("bt_light_checkbox1").checked = false;
+          document.getElementById("bt_light_checkbox2").checked = false;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = false;
+          document.getElementById("bt_light_img1").src = "images/light-off.svg"
+          document.getElementById("bt_light_img2").src = "images/light-off.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        }else if (message.payloadString==="0011") {
+          document.getElementById("bt_light_checkbox1").checked = false;
+          document.getElementById("bt_light_checkbox2").checked = false;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-off.svg"
+          document.getElementById("bt_light_img2").src = "images/light-off.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else if (message.payloadString==="0100") {
+          document.getElementById("bt_light_checkbox1").checked = false;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = false;
+          document.getElementById("bt_light_checkbox4").checked = false;
+          document.getElementById("bt_light_img1").src = "images/light-off.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-off.svg"
+          document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        }else if (message.payloadString==="0101") {
+          document.getElementById("bt_light_checkbox1").checked = false;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = false;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-off.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-off.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else if (message.payloadString==="0110") {
+          document.getElementById("bt_light_checkbox1").checked = false;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = false;
+          document.getElementById("bt_light_img1").src = "images/light-off.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        }else if (message.payloadString==="0111") {
+          document.getElementById("bt_light_checkbox1").checked = false;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-off.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else if (message.payloadString==="1000") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = false;
+          document.getElementById("bt_light_checkbox3").checked = false;
+          document.getElementById("bt_light_checkbox4").checked = false;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-off.svg"
+          document.getElementById("bt_light_img3").src = "images/light-off.svg"
+          document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        }else if (message.payloadString==="1001") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = false;
+          document.getElementById("bt_light_checkbox3").checked = false;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-off.svg"
+          document.getElementById("bt_light_img3").src = "images/light-off.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else if (message.payloadString==="1010") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = false;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = false;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-off.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        }else if (message.payloadString==="1011") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = false;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-off.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else if (message.payloadString==="1100") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = false;
+          document.getElementById("bt_light_checkbox4").checked = false;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-off.svg"
+          document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        }else if (message.payloadString==="1101") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = false;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-off.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else if (message.payloadString==="1110") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = false;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-off.svg"
+        }else if (message.payloadString==="1111") {
+          document.getElementById("bt_light_checkbox1").checked = true;
+          document.getElementById("bt_light_checkbox2").checked = true;
+          document.getElementById("bt_light_checkbox3").checked = true;
+          document.getElementById("bt_light_checkbox4").checked = true;
+          document.getElementById("bt_light_img1").src = "images/light-on.svg"
+          document.getElementById("bt_light_img2").src = "images/light-on.svg"
+          document.getElementById("bt_light_img3").src = "images/light-on.svg"
+          document.getElementById("bt_light_img4").src = "images/light-on.svg"
+        }else{
+
+        }
+
+    }
+
+
 }
 
 // Called when the disconnection button is pressed
@@ -370,8 +535,10 @@ if(isBurglarAlarmActive){
 
         if (document.getElementById("outdoor_light_sensor_checkbox").checked === true) {
             client.send("smarthouse/outdoor_light/state", "on", 0, true);
+            isOutdoorSensorActive = true;
         } else {
             client.send("smarthouse/outdoor_light/state", "off", 0, true);
+            isOutdoorSensorActive = false;
         }
     }
 
@@ -441,6 +608,33 @@ if(isBurglarAlarmActive){
       var temp = document.getElementById("sliderHeater2").value
 
             client.send("smarthouse/heater_2/value", temp, 0, true);
+
+    }
+
+    function checkBTLightState(){
+      var msg = '';
+      if (document.getElementById("bt_light_checkbox1").checked === true) {
+          msg = msg + '1';
+      } else {
+          msg = msg + '0';
+      }
+      if (document.getElementById("bt_light_checkbox2").checked === true) {
+          msg = msg + '1';
+      } else {
+          msg = msg + '0';
+      }
+      if (document.getElementById("bt_light_checkbox3").checked === true) {
+        msg = msg + '1';
+      } else {
+          msg = msg + '0';
+      }
+      if (document.getElementById("bt_light_checkbox4").checked === true) {
+        msg = msg + '1';
+      } else {
+          msg = msg + '0';
+      }
+
+      client.send("smarthouse/bt_light1/state", msg, 0, true);
 
     }
 
