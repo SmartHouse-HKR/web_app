@@ -137,6 +137,7 @@ function onConnect() {
     client.subscribe("smarthouse/bt_fan1/swing");
     client.subscribe("smarthouse/bt_fan1/timer");
     client.subscribe("smarthouse/bt_fan1/mode");
+    client.subscribe("smarthouse/bt_lamp1/state");
 
 
 }
@@ -164,6 +165,19 @@ function onMessageArrived(message) {
             document.getElementById("indoor_light_checkbox").checked = false
             document.getElementById("in_light_img").src = "images/light-off.svg"
             document.getElementById("indoor_light_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
+        }
+
+    }
+
+    if (message.destinationName === "smarthouse/bt_lamp1/state") {
+        if (message.payloadString === "on") {
+            document.getElementById("bt_lamp_checkbox").checked = true
+            document.getElementById("bt_lamp_img").src = "images/lamp-on.svg"
+            document.getElementById("bt_lamp_card").style.boxShadow = "10px 12px 10px rgba(153,255,0,0.6)";
+        } else {
+            document.getElementById("bt_lamp_checkbox").checked = false
+            document.getElementById("bt_lamp_img").src = "images/lamp-off.svg"
+            document.getElementById("bt_lamp_card").style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)";
         }
 
     }
@@ -614,6 +628,15 @@ if(isBurglarAlarmActive){
             client.send("smarthouse/indoor_light/state", "on", 0, true);
         } else {
             client.send("smarthouse/indoor_light/state", "off", 0, true);
+        }
+    }
+
+    function checkBtLampState() {
+
+        if (document.getElementById("bt_lamp_checkbox").checked === true) {
+            client.send("smarthouse/bt_lamp1/state", "on", 0, true);
+        } else {
+            client.send("smarthouse/bt_lamp1/state", "off", 0, true);
         }
     }
 
